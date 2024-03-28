@@ -20,12 +20,12 @@ class Main{
 
     public static void printNames(){
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
-        Statement s =  con.createStatement();
-        ResultSet rs = s.executeQuery("SELECT * FROM student;");
-        while(rs!=null&&rs.next())
-            System.out.println(rs.getString("last_name")+", "+rs.getString("first_name"));
-        con.close();
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM student;");
+            while(rs!=null&&rs.next())
+                System.out.println(rs.getString("last_name")+", "+rs.getString("first_name"));
+            con.close();
         }catch(Exception e){ System.out.println(e);}
     }
 
