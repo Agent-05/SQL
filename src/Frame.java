@@ -14,18 +14,30 @@ public class Frame extends JFrame {
 
         JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topBar.setSize(800,100);
+        JMenuBar menuBar = new JMenuBar();
 
-        JMenu file = new JMenu("File");
-        JMenu view = new JMenu("View");
+        JMenu fileMenu = new JMenu("File");
+        JMenu viewMenu = new JMenu("View");
         JButton help = new JButton("Help");
+
         help.setFocusable(false);
 
-        JMenuItem item = new JMenuItem("Text 1");
-        file.add(item);
+        JMenuItem newItem = new JMenuItem("Title");
+        JMenuItem newItem2 = new JMenuItem("Title");
+        JMenuItem newItem3 = new JMenuItem("Title");
+        JMenuItem newItem4 = new JMenuItem("Title");
+        JMenuItem newItem5 = new JMenuItem("Title");
 
-        topBar.add(file);
-        topBar.add(view);
-        topBar.add(help);
+        fileMenu.add(newItem);
+        fileMenu.add(newItem2);
+        fileMenu.add(newItem3);
+
+        menuBar.add(fileMenu);
+        menuBar.add(viewMenu);
+        menuBar.add(help);
+
+        topBar.add(menuBar);
+
 
         this.add(topBar);
 
