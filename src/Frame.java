@@ -10,37 +10,103 @@ public class Frame extends JFrame {
         this.setSize(800,500);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setResizable(false);
+        this.setResizable(true);
+        this.setTitle("School Manager Program");
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBounds(0,25,784,437);
+        mainPanel.setBackground(Color.BLUE);
+        JLabel text1 = new JLabel("Choose a View");
+        mainPanel.add(text1);
+        this.add(mainPanel);
 
         JPanel topBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topBar.setSize(800,100);
+        topBar.setBounds(0,0,800,25);
         JMenuBar menuBar = new JMenuBar();
 
         JMenu fileMenu = new JMenu("File");
         JMenu viewMenu = new JMenu("View");
-        JButton help = new JButton("Help");
+        JMenu helpMenu = new JMenu("Help");
 
-        help.setFocusable(false);
+        JMenuItem exportItem = new JMenuItem("Export Data");
+        JMenuItem importItem = new JMenuItem("Import Data");
+        JMenuItem purgeItem = new JMenuItem("Purge Data");
+        JMenuItem exitItem = new JMenuItem("Exit Program");
 
-        JMenuItem newItem = new JMenuItem("Title");
-        JMenuItem newItem2 = new JMenuItem("Title");
-        JMenuItem newItem3 = new JMenuItem("Title");
-        JMenuItem newItem4 = new JMenuItem("Title");
-        JMenuItem newItem5 = new JMenuItem("Title");
+        exportItem.addActionListener(e -> {
+            mainPanel.setBackground(Color.cyan);
+        });
 
-        fileMenu.add(newItem);
-        fileMenu.add(newItem2);
-        fileMenu.add(newItem3);
+        importItem.addActionListener(e -> {
+            mainPanel.setBackground(Color.gray);
+
+        });
+
+        purgeItem.addActionListener(e -> {
+            mainPanel.setBackground(Color.green);
+
+        });
+        exitItem.addActionListener(e -> {
+            System.exit(0);
+        });
+
+
+
+        JMenuItem teacherItem = new JMenuItem("Teacher View");
+        JMenuItem studentItem = new JMenuItem("Student View");
+        JMenuItem courseItem = new JMenuItem("Course View");
+        JMenuItem sectionItem = new JMenuItem("Section View");
+
+        teacherItem.addActionListener(e -> {
+            this.remove(mainPanel);
+            new teacherPanel();
+        });
+
+        studentItem.addActionListener(e -> {
+
+        });
+
+        courseItem.addActionListener(e -> {
+
+        });
+
+        sectionItem.addActionListener(e -> {
+
+        });
+
+
+        JMenuItem aboutItem = new JMenuItem("About");
+
+        aboutItem.addActionListener(e -> {
+
+        });
+
+
+
+
+
+        fileMenu.add(exportItem);
+        fileMenu.add(importItem);
+        fileMenu.add(purgeItem);
+        fileMenu.add(exitItem);
+
+        viewMenu.add(teacherItem);
+        viewMenu.add(studentItem);
+        viewMenu.add(courseItem);
+        viewMenu.add(sectionItem);
+
+        helpMenu.add(aboutItem);
 
         menuBar.add(fileMenu);
         menuBar.add(viewMenu);
-        menuBar.add(help);
+        menuBar.add(helpMenu);
+        menuBar.setBackground(new Color(162, 162, 162));
 
         topBar.add(menuBar);
+        topBar.setBackground(new Color(162, 162, 162));
 
 
         this.add(topBar);
-
 
 
 
