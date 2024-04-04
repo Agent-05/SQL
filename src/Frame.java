@@ -9,13 +9,12 @@ public class Frame extends JFrame {
         this.setLayout(null);
         this.setSize(800,500);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         this.setTitle("School Manager Program");
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBounds(0,25,784,437);
-        mainPanel.setBackground(Color.BLUE);
         JLabel text1 = new JLabel("Choose a View");
         mainPanel.add(text1);
         this.add(mainPanel);
@@ -59,7 +58,8 @@ public class Frame extends JFrame {
 
         teacherItem.addActionListener(e -> {
             this.remove(mainPanel);
-            new teacherPanel();
+            this.add(new teacherPanel());
+            repaint();
         });
 
         studentItem.addActionListener(e -> {
