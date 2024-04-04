@@ -45,7 +45,7 @@ public class Teacher {
                 {
                     if(rs.getString("first_name").equals("-"))
                     {
-                        s.execute("DELETE FROM teacher WHERE id="+id+" OR last_name=’"+lastName+"’;");
+                        s.execute("DELETE FROM teacher WHERE id="+id+";");
                     }else{
                         this.firstName = firstName;
                         this.lastName = lastName;

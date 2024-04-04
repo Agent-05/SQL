@@ -25,7 +25,6 @@ public class Student {
             }
             catch(Exception e)
             {
-                //updateStudent(id, firstName, lastName);
                 System.out.println("id already exists");
                 //you can call a function to tell user that it doesnt work
             }
@@ -43,9 +42,9 @@ public class Student {
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("first_name").equals("-"))
+                    if(firstName.equals("-"))
                     {
-                        s.execute("DELETE FROM student WHERE id="+id+" OR last_name=’"+lastName+"’;");
+                        s.execute("DELETE FROM student WHERE id="+id+";");
                     }else{
                         this.firstName = firstName;
                         this.lastName = lastName;
@@ -56,7 +55,7 @@ public class Student {
                 }
             }
             con.close();
-        }catch(Exception e){ System.out.println(e);}
+        }catch(Exception e){ }
     }
 
 
@@ -72,14 +71,4 @@ public class Student {
         return lastName;
     }
 
-    public static void printNames(){
-        try{
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
-            Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM student;");
-            while(rs!=null&&rs.next())
-                System.out.println(rs.getString("last_name")+", "+rs.getString("first_name"));
-            con.close();
-        }catch(Exception e){ System.out.println(e);}
-    }
 }

@@ -3,23 +3,25 @@ import java.sql.*;
 
 public class Section {
     int id = -1;
-    int student_id = -1;
+    int course_id = -1;
+    int teacher_id = -1;
 
-    public Section(int id, int student_id)
+    public Section(int id, int course_id, int teacher_id)
     {
         this.id = id;
-        this.student_id = student_id;
-        addEnrollment();
+        this.course_id = course_id;
+        this.teacher_id = teacher_id;
+        addSection();
     }
 
-    public void addEnrollment(){
+    public void addSection(){
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            s.execute("CREATE table if not exists enrollment(id INTEGER NOT NULL AUTO_INCREMENT, student_id INTEGER NOT NULL, PRIMARY KEY(id));");
+            s.execute("CREATE table if not exists section(id INTEGER NOT NULL AUTO_INCREMENT, course_id INTEGER NOT NULL, teacher_id INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO enrollment (id, student_id) VALUES ("+id+", "+student_id+")");
+                s.execute("INSERT INTO section (id, course_id, teacher_id) VALUES ("+id+", "+course_id+", "+teacher_id+")");
             }
             catch(Exception e)
             {
@@ -30,22 +32,24 @@ public class Section {
     }
 
     //updates or deletes student
-    public void updateEnrollment(int id, int student_id){//must refer to it by id, pass - in as student_id to delete
+    public void updateSection(int id, int course_id, int teacher_id){//must refer to it by id, pass - in as course_id to delete
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM enrollment;");
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
             while(rs!=null&&rs.next())
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("student_id").equals("-"))
+                    if(rs.getString("course_id").equals("-"))
                     {
-                        s.execute("DELETE FROM enrollment WHERE id="+id+";");
+                        s.execute("DELETE FROM section WHERE id="+id+";");
                     }else{
                         this.id = id;
-                        this.student_id = student_id;
-                        s.execute("UPDATE enrollment SET student_id="+student_id+" WHERE id="+id+";");
+                        this.course_id = course_id;
+                        this.teacher_id = teacher_id;
+                        s.execute("UPDATE section SET course_id="+course_id+" WHERE id="+id+";");
+                        s.execute("UPDATE section SET teacher_id="+teacher_id+" WHERE id="+id+";");
                     }
                 }
             }
@@ -58,8 +62,11 @@ public class Section {
         return id;
     }
 
-    public int getStudentId() {
-        return student_id;
+    public int getSectionId() {
+        return course_id;
+    }
+    public int getTeacherId() {
+        return teacher_id;
     }
 
 
