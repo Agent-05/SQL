@@ -8,7 +8,7 @@ public class Teacher {
     public String firstName = "default";
     String lastName = "name";
 
-    public Teacher(int id, String fn, String ln)
+    public Teacher(String fn, String ln)
     {
         this.id = id;
         firstName = fn;
@@ -23,7 +23,9 @@ public class Teacher {
             s.execute("CREATE table if not exists teacher(id INTEGER NOT NULL AUTO_INCREMENT, first_name text, last_name text, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO teacher (id, first_name, last_name) VALUES ("+id+", \'"+firstName+"\', \'"+lastName+"\')");
+                s.execute("INSERT INTO teacher (first_name, last_name) VALUES (\'"+firstName+"\', \'"+lastName+"\')");
+                ResultSet rs = s.executeQuery("SELECT first_name, last_name FROM teacher;");
+                id = rs.getInt("id");
             }
             catch(Exception e)
             {
