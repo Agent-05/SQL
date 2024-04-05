@@ -15,6 +15,12 @@ public class Teacher {
         lastName = ln;
         addTeacher();
     }
+    public Teacher(int id, String fn, String ln)
+    {
+        this.id = id;
+        firstName = fn;
+        lastName = ln;
+    }
 
     public void addTeacher(){
         try{
@@ -29,7 +35,7 @@ public class Teacher {
             }
             catch(Exception e)
             {
-                System.out.println("id already exists");
+                //System.out.println("id already exists");
             }
             con.close();
         }catch(Exception e){ System.out.println(e);}
@@ -74,4 +80,9 @@ public class Teacher {
         return lastName;
     }
 
+    @Override
+    public String toString()
+    {
+        return getFn() + ", " + getLn();
+    }
 }

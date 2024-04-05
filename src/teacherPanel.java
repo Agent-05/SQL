@@ -1,20 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.sql.*;
 
 public class teacherPanel extends JPanel {
+    ArrayList<Teacher> teachers = new ArrayList<Teacher>();
+    JList<Teacher> teacherList = new JList<Teacher>();
     public teacherPanel(){
         this.setLayout(null);
         this.setBounds(0,25,784,437);
-
-
-        ArrayList<Teacher> teachers = new ArrayList<Teacher>();
-        JList<Teacher> teacherList = new JList<Teacher>();
+        getNames();
+        teacherList.setListData(toArr(teachers));
         JScrollPane teacherFrame = new JScrollPane(teacherList);
         teacherFrame.setBounds(10, 10, 280, 275);
         this.add(teacherFrame);
-        teacherList.setListData(toArr(teachers));
+
 
         JLabel txt1 = new JLabel("First Name:");
         JLabel txt2 = new JLabel("Last Name:");
@@ -28,6 +33,9 @@ public class teacherPanel extends JPanel {
         JButton clear = new JButton();
         JButton deselect = new JButton();
         JButton delete = new JButton();
+
+
+
 
         txt1.setBounds(300, 20, 250, 25);
         txt2.setBounds(300, 60, 250, 25);
@@ -44,18 +52,7 @@ public class teacherPanel extends JPanel {
         clear.setBounds(300, 230, 200, 25);
         delete.setBounds(300, 200, 200, 25);
 
-        this.add(txt1);
-        this.add(txt2);
-        this.add(txt3);
-        this.add(txt4);
-        this.add(fName);
-        this.add(lName);
-        this.add(phoneNumber);
-        this.add(address);
-        this.add(save);
-        this.add(clear);
-        this.add(deselect);
-        this.add(delete);
+
 
         deselect.setText("Deselect");
         save.setText("Save");
@@ -69,14 +66,13 @@ public class teacherPanel extends JPanel {
         save.addActionListener(e -> {
             if (teacherList.isSelectionEmpty()) {
                 if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
-                    Teacher teacher = new Teacher(10,null,null);
+                    Teacher teacher = new Teacher(fName.getText(),lName.getText());
                     teachers.add(teacher);
                     teacherList.setListData(toArr(teachers));
                 }
             } else {
                 Teacher teacher = teacherList.getSelectedValue();
-                teacher.setFn(fName.getText());
-                teacher.setLn(lName.getText());
+                teacher.updateTeacher(teacher.getId(), fName.getText(), lName.getText());
                 teacherList.setListData(toArr(teachers));
                 fName.setText("");
                 lName.setText("");
@@ -135,8 +131,29 @@ public class teacherPanel extends JPanel {
         for (int i = 0; i < list.size(); i++){
             array[i] = list.get(i);
         }
-        Arrays.sort(array);
         return array;
+    }
+
+    public void getNames(){
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM teacher;");
+            while(rs!=null&&rs.next())
+            {
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                int id = rs.getInt("id");
+                Teacher existingTeacher = new Teacher(id, firstName, lastName);//pass in an id to not create a new teacher but just get one instead
+                teachers.add(existingTeacher);
+                System.out.println(teachers.get(0));
+            }
+            teacherList.setListData(toArr(teachers));
+            con.close();
+        }catch(Exception e)
+        {
+
+        }
     }
 
 }

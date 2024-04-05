@@ -55,10 +55,11 @@ public class Frame extends JFrame {
         JMenuItem studentItem = new JMenuItem("Student View");
         JMenuItem courseItem = new JMenuItem("Course View");
         JMenuItem sectionItem = new JMenuItem("Section View");
-
+        teacherPanel tp=new teacherPanel();
         teacherItem.addActionListener(e -> {
             this.remove(mainPanel);
-            this.add(new teacherPanel());
+            this.add(tp);
+
             repaint();
         });
 
