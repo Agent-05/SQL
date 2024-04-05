@@ -52,7 +52,18 @@ public class teacherPanel extends JPanel {
         clear.setBounds(300, 230, 200, 25);
         delete.setBounds(300, 200, 200, 25);
 
-
+        this.add(txt1);
+        this.add(txt2);
+        this.add(txt3);
+        this.add(txt4);
+        this.add(fName);
+        this.add(lName);
+        this.add(phoneNumber);
+        this.add(address);
+        this.add(save);
+        this.add(clear);
+        this.add(deselect);
+        this.add(delete);
 
         deselect.setText("Deselect");
         save.setText("Save");
