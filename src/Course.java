@@ -13,6 +13,11 @@ public class Course {
         this.id = id;
         this.title = title;
         diff = type;
+    }
+    public Course(String title, int type)
+    {
+        this.title = title;
+        diff = type;
         addCourse();
     }
 
@@ -23,7 +28,7 @@ public class Course {
             s.execute("CREATE table if not exists course(id INTEGER NOT NULL AUTO_INCREMENT, title text, diff INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO course (id, title, diff) VALUES ("+id+", \'"+title+"\', "+diff+")");
+                s.execute("INSERT INTO course (title, diff) VALUES (\'"+title+"\', "+diff+")");
             }
             catch(Exception e)
             {

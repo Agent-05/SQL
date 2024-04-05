@@ -12,9 +12,9 @@ class Main{
     public static void main(String[] args) {
         Student a = new Student("a", "Dutton");
         Teacher b = new Teacher("Jim", "Dutton");
-        Course c = new Course(5, "Jim", 1);
-        Enrollment d = new Enrollment(5, 5);
-        Section e = new Section(5, 5, 5);
+        Course c = new Course("Jim", 1);
+        Enrollment d = new Enrollment(5);
+        Section e = new Section(5, 5);
     }
 
         //some logic principles

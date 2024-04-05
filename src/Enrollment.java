@@ -9,6 +9,10 @@ public class Enrollment {
     {
         this.id = id;
         this.student_id = student_id;
+    }
+    public Enrollment(int student_id)
+    {
+        this.student_id = student_id;
         addEnrollment();
     }
 
@@ -19,7 +23,7 @@ public class Enrollment {
             s.execute("CREATE table if not exists enrollment(id INTEGER NOT NULL AUTO_INCREMENT, student_id INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO enrollment (id, student_id) VALUES ("+id+", "+student_id+")");
+                s.execute("INSERT INTO enrollment (id, student_id) VALUES ("+student_id+")");
             }
             catch(Exception e)
             {

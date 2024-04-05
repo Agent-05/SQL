@@ -11,6 +11,11 @@ public class Section {
         this.id = id;
         this.course_id = course_id;
         this.teacher_id = teacher_id;
+    }
+    public Section(int course_id, int teacher_id)
+    {
+        this.course_id = course_id;
+        this.teacher_id = teacher_id;
         addSection();
     }
 
@@ -21,7 +26,7 @@ public class Section {
             s.execute("CREATE table if not exists section(id INTEGER NOT NULL AUTO_INCREMENT, course_id INTEGER NOT NULL, teacher_id INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO section (id, course_id, teacher_id) VALUES ("+id+", "+course_id+", "+teacher_id+")");
+                s.execute("INSERT INTO section (id, course_id, teacher_id) VALUES ("+course_id+", "+teacher_id+")");
             }
             catch(Exception e)
             {
