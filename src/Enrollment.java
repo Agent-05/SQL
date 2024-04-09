@@ -34,7 +34,7 @@ public class Enrollment {
     }
 
     //updates or deletes student
-    public void updateEnrollment(int id, int student_id){//must refer to it by id, pass - in as student_id to delete
+    public void updateEnrollment(int id, int student_id){//must refer to it by id, pass -1 in as student_id to delete
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
@@ -43,7 +43,7 @@ public class Enrollment {
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("student_id").equals("-"))
+                    if(student_id == -1)
                     {
                         s.execute("DELETE FROM enrollment WHERE id="+id+";");
                     }else{
@@ -66,5 +66,10 @@ public class Enrollment {
         return student_id;
     }
 
+    @Override
+    public String toString()
+    {
+        return Integer.toString(getStudentId());
+    }
 
 }

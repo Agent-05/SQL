@@ -37,7 +37,7 @@ public class Section {
     }
 
     //updates or deletes student
-    public void updateSection(int id, int course_id, int teacher_id){//must refer to it by id, pass - in as course_id to delete
+    public void updateSection(int id, int course_id, int teacher_id){//must refer to it by id, pass -1 in as course_id to delete
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
@@ -46,7 +46,7 @@ public class Section {
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("course_id").equals("-"))
+                    if(course_id == -1)
                     {
                         s.execute("DELETE FROM section WHERE id="+id+";");
                     }else{
@@ -75,4 +75,9 @@ public class Section {
     }
 
 
+    @Override
+    public String toString()
+    {
+        return getSectionId() + ", " + getTeacherId();
+    }
 }

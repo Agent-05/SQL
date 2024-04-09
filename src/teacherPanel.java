@@ -113,6 +113,7 @@ public class teacherPanel extends JPanel {
 
         delete.addActionListener(e -> {
             Teacher teacher = teacherList.getSelectedValue();
+            teacher.updateTeacher(teacher.getId(), "-", "");
             teachers.remove(teacher);
             teacherList.setListData(toArr(teachers));
             fName.setText("");
@@ -157,7 +158,6 @@ public class teacherPanel extends JPanel {
                 int id = rs.getInt("id");
                 Teacher existingTeacher = new Teacher(id, firstName, lastName);//pass in an id to not create a new teacher but just get one instead
                 teachers.add(existingTeacher);
-                System.out.println(teachers.get(0));
             }
             teacherList.setListData(toArr(teachers));
             con.close();

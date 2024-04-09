@@ -10,7 +10,6 @@ public class Teacher {
 
     public Teacher(String fn, String ln)
     {
-        this.id = id;
         firstName = fn;
         lastName = ln;
         addTeacher();
@@ -51,8 +50,9 @@ public class Teacher {
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("first_name").equals("-"))
+                    if(firstName.equals("-"))
                     {
+                        System.out.println("deleted");
                         s.execute("DELETE FROM teacher WHERE id="+id+";");
                     }else{
                         this.firstName = firstName;

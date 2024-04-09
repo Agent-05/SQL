@@ -13,6 +13,12 @@ public class Student {
         addStudent();
     }
 
+    public Student(int id, String fn, String ln)
+    {
+        this.id = id;
+        firstName = fn;
+        lastName = ln;
+    }
     public void addStudent(){//schedule
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
@@ -70,6 +76,12 @@ public class Student {
 
     public String getLn() {
         return lastName;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getFn() + ", " + getLn();
     }
 
 }

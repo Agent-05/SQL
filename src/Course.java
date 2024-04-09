@@ -48,7 +48,7 @@ public class Course {
             {
                 if(rs.getInt("id") == id)
                 {
-                    if(rs.getString("title").equals("-"))
+                    if(title.equals("-"))
                     {
                         s.execute("DELETE FROM course WHERE id="+id+";");
                     }else{
@@ -74,6 +74,13 @@ public class Course {
 
     public int getDiff() {
         return diff;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return getTitle() + ", " + getDiff();
     }
 
 }
