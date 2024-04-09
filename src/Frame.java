@@ -14,6 +14,12 @@ public class Frame extends JFrame {
         this.setTitle("School Manager Program");
 
         JPanel mainPanel = new JPanel();
+        teacherPanel tp=new teacherPanel();
+        studentPanel sp=new studentPanel();
+        coursePanel cp=new coursePanel();
+        sectionPanel secP =new sectionPanel();
+        aboutPanel ap =new aboutPanel();
+
         mainPanel.setBounds(0,25,784,437);
         JLabel text1 = new JLabel("Choose a View");
         mainPanel.add(text1);
@@ -55,37 +61,68 @@ public class Frame extends JFrame {
         JMenuItem studentItem = new JMenuItem("Student View");
         JMenuItem courseItem = new JMenuItem("Course View");
         JMenuItem sectionItem = new JMenuItem("Section View");
-        teacherPanel tp=new teacherPanel();
-        studentPanel sp=new studentPanel();
+
         teacherItem.addActionListener(e -> {
             this.remove(mainPanel);
+            this.remove(tp);
             this.remove(sp);
-            this.add(tp);
+            this.remove(secP);
+            this.remove(cp);
+            this.remove(ap);
 
+            this.add(tp);
             repaint();
         });
 
         studentItem.addActionListener(e -> {
             this.remove(mainPanel);
             this.remove(tp);
-            this.add(sp);
+            this.remove(sp);
+            this.remove(secP);
+            this.remove(cp);
+            this.remove(ap);
 
+            this.add(sp);
             repaint();
         });
 
         courseItem.addActionListener(e -> {
+            this.remove(mainPanel);
+            this.remove(tp);
+            this.remove(sp);
+            this.remove(secP);
+            this.remove(cp);
+            this.remove(ap);
 
+            this.add(cp);
+            repaint();
         });
 
         sectionItem.addActionListener(e -> {
+            this.remove(mainPanel);
+            this.remove(tp);
+            this.remove(sp);
+            this.remove(secP);
+            this.remove(cp);
+            this.remove(ap);
 
+            this.add(secP);
+            repaint();
         });
 
 
         JMenuItem aboutItem = new JMenuItem("About");
 
         aboutItem.addActionListener(e -> {
+            this.remove(mainPanel);
+            this.remove(tp);
+            this.remove(sp);
+            this.remove(secP);
+            this.remove(cp);
+            this.remove(ap);
 
+            this.add(ap);
+            repaint();
         });
 
 
