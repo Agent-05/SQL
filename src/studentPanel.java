@@ -23,12 +23,8 @@ public class studentPanel extends JPanel {
 
         JLabel txt1 = new JLabel("First Name:");
         JLabel txt2 = new JLabel("Last Name:");
-        JLabel txt3 = new JLabel("Phone Number:");
-        JLabel txt4 = new JLabel("Address:");
         JTextField fName = new JTextField();
         JTextField lName = new JTextField();
-        JTextField phoneNumber = new JTextField();
-        JTextField address = new JTextField();
         JButton save = new JButton();
         JButton clear = new JButton();
         JButton deselect = new JButton();
@@ -39,14 +35,10 @@ public class studentPanel extends JPanel {
 
         txt1.setBounds(300, 20, 250, 25);
         txt2.setBounds(300, 60, 250, 25);
-        txt3.setBounds(300, 100, 250, 25);
-        txt4.setBounds(300, 140, 250, 25);
 
 
         fName.setBounds(400, 22, 100, 17);
         lName.setBounds(400, 62, 100, 17);
-        phoneNumber.setBounds(400, 102, 100, 17);
-        address.setBounds(400, 142, 100, 17);
         deselect.setBounds(300, 260, 200, 25);
         save.setBounds(300, 170, 200, 25);
         clear.setBounds(300, 230, 200, 25);
@@ -54,12 +46,8 @@ public class studentPanel extends JPanel {
 
         this.add(txt1);
         this.add(txt2);
-        this.add(txt3);
-        this.add(txt4);
         this.add(fName);
         this.add(lName);
-        this.add(phoneNumber);
-        this.add(address);
         this.add(save);
         this.add(clear);
         this.add(deselect);
@@ -87,8 +75,6 @@ public class studentPanel extends JPanel {
                 studentList.setListData(toArr(students));
                 fName.setText("");
                 lName.setText("");
-                phoneNumber.setText("");
-                address.setText("");
                 deselect.setVisible(false);
                 delete.setVisible(false);
             }
@@ -97,16 +83,12 @@ public class studentPanel extends JPanel {
         clear.addActionListener(e -> {
             fName.setText("");
             lName.setText("");
-            phoneNumber.setText("");
-            address.setText("");
         });
 
         deselect.addActionListener(e -> {
             studentList.clearSelection();
             fName.setText("");
             lName.setText("");
-            phoneNumber.setText("");
-            address.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
         });
@@ -118,8 +100,6 @@ public class studentPanel extends JPanel {
             studentList.setListData(toArr(students));
             fName.setText("");
             lName.setText("");
-            phoneNumber.setText("");
-            address.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
         });
@@ -129,10 +109,8 @@ public class studentPanel extends JPanel {
             if (student != null) {
                 deselect.setVisible(true);
                 delete.setVisible(true);
-//                fName.setText(student.getfName());
-//                lName.setText(student.getlName());
-//                address.setText(student.getAddress());
-//                phoneNumber.setText(student.getPhoneNumber());
+                fName.setText(student.getFn());
+                lName.setText(student.getLn());
             }
         });
 
