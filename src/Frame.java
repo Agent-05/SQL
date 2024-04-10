@@ -151,9 +151,6 @@ public class Frame extends JFrame {
 
 
         this.add(topBar);
-
-
-
         this.setVisible(true);
     }
 }
