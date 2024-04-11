@@ -13,7 +13,7 @@ public class teacherPanel extends JPanel {
     JList<Teacher> teacherList = new JList<Teacher>();
     public teacherPanel(){
         this.setLayout(null);
-        this.setBounds(0,25,784,437);
+        this.setBounds(0,25,800,437);
         getNames();
         teacherList.setListData(toArr(teachers));
         JScrollPane teacherFrame = new JScrollPane(teacherList);
@@ -33,8 +33,8 @@ public class teacherPanel extends JPanel {
 
 
 
-        txt1.setBounds(300, 20, 250, 25);
-        txt2.setBounds(300, 60, 250, 25);
+        txt1.setBounds(300, 20, 100, 25);
+        txt2.setBounds(300, 60, 100, 25);
 
 
         fName.setBounds(400, 22, 100, 17);
@@ -113,7 +113,20 @@ public class teacherPanel extends JPanel {
                 lName.setText(teacher.getLn());
             }
         });
-        
+
+
+        String[] columnTitles = {"Section ID", "Course Title"};
+        String[][] data = {};
+        JTable table = new JTable(data, columnTitles);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(510, 10, 280, 275);
+        scrollPane.setViewportView(table);
+
+        table.setVisible(true);
+        this.add(scrollPane);
 
     }
     public static Teacher[] toArr(ArrayList<Teacher> list){
