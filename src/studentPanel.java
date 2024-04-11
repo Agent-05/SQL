@@ -67,17 +67,17 @@ public class studentPanel extends JPanel {
                 if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
                     Student student = new Student(fName.getText(),lName.getText());
                     students.add(student);
-                    studentList.setListData(toArr(students));
+                    getNames();
                 }
             } else {
                 Student student = studentList.getSelectedValue();
                 student.updateStudent(student.getId(), fName.getText(), lName.getText());
-                studentList.setListData(toArr(students));
-                fName.setText("");
-                lName.setText("");
-                deselect.setVisible(false);
-                delete.setVisible(false);
             }
+            studentList.setListData(toArr(students));
+            fName.setText("");
+            lName.setText("");
+            deselect.setVisible(false);
+            delete.setVisible(false);
         });
 
         clear.addActionListener(e -> {
@@ -125,6 +125,7 @@ public class studentPanel extends JPanel {
     }
 
     public void getNames(){
+        students.clear();
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();

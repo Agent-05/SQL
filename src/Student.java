@@ -27,8 +27,6 @@ public class Student {
 
             try{
                 s.execute("INSERT INTO student (first_name, last_name) VALUES (\'"+firstName+"\', \'"+lastName+"\')");
-                ResultSet rs = s.executeQuery("SELECT first_name, last_name FROM student;");
-                id = rs.getInt("id");
             }
             catch(Exception e)
             {

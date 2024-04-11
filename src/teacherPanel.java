@@ -68,6 +68,7 @@ public class teacherPanel extends JPanel {
                     Teacher teacher = new Teacher(fName.getText(),lName.getText());
                     teachers.add(teacher);
                     teacherList.setListData(toArr(teachers));
+                    getNames();
                 }
             } else {
                 Teacher teacher = teacherList.getSelectedValue();
@@ -125,6 +126,7 @@ public class teacherPanel extends JPanel {
     }
 
     public void getNames(){
+        teachers.clear();
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
