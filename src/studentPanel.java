@@ -63,15 +63,15 @@ public class studentPanel extends JPanel {
 
 
         save.addActionListener(e -> {
-            if (studentList.isSelectionEmpty()) {
-                if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
-                    Student student = new Student(fName.getText(),lName.getText());
-                    students.add(student);
-                    getNames();
-                }
-            } else {
-                Student student = studentList.getSelectedValue();
-                student.updateStudent(student.getId(), fName.getText(), lName.getText());
+            if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
+                if (studentList.isSelectionEmpty()) {
+                        Student student = new Student(fName.getText(),lName.getText());
+                        students.add(student);
+                        getNames();
+                    }
+                } else {
+                    Student student = studentList.getSelectedValue();
+                    student.updateStudent(student.getId(), fName.getText(), lName.getText());
             }
             studentList.setListData(toArr(students));
             fName.setText("");

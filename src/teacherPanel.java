@@ -63,21 +63,21 @@ public class teacherPanel extends JPanel {
 
 
         save.addActionListener(e -> {
-            if (teacherList.isSelectionEmpty()) {
-                if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
-                    Teacher teacher = new Teacher(fName.getText(),lName.getText());
-                    teachers.add(teacher);
+            if (!fName.getText().isEmpty() && !lName.getText().isEmpty()) {
+                if (teacherList.isSelectionEmpty()) {
+                        Teacher teacher = new Teacher(fName.getText(),lName.getText());
+                        teachers.add(teacher);
+                        teacherList.setListData(toArr(teachers));
+                        getNames();
+                } else {
+                    Teacher teacher = teacherList.getSelectedValue();
+                    teacher.updateTeacher(teacher.getId(), fName.getText(), lName.getText());
                     teacherList.setListData(toArr(teachers));
-                    getNames();
+                    fName.setText("");
+                    lName.setText("");
+                    deselect.setVisible(false);
+                    delete.setVisible(false);
                 }
-            } else {
-                Teacher teacher = teacherList.getSelectedValue();
-                teacher.updateTeacher(teacher.getId(), fName.getText(), lName.getText());
-                teacherList.setListData(toArr(teachers));
-                fName.setText("");
-                lName.setText("");
-                deselect.setVisible(false);
-                delete.setVisible(false);
             }
         });
 

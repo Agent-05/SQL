@@ -1,5 +1,8 @@
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.util.*;
 
 public class Frame extends JFrame {
     public static void main(String[] args){
@@ -39,11 +42,11 @@ public class Frame extends JFrame {
         JMenuItem exitItem = new JMenuItem("Exit Program");
 
         exportItem.addActionListener(e -> {
-            mainPanel.setBackground(Color.cyan);
+            exportFile();
         });
 
         importItem.addActionListener(e -> {
-            mainPanel.setBackground(Color.gray);
+            importFile();
 
         });
 
@@ -152,5 +155,43 @@ public class Frame extends JFrame {
 
         this.add(topBar);
         this.setVisible(true);
+    }
+
+    public void importFile()
+    {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Import File");
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//only a file can be imported
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getCurrentDirectory(): "
+                    +  chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile() : "
+                    +  chooser.getSelectedFile());
+        }
+        else {
+            System.out.println("No Selection ");
+        }
+    }
+
+    public void exportFile()
+    {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Export File");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//only a folder can be chosen to be exported to
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File f = new File(chooser.getCurrentDirectory() + "\\School Manager Data.txt");//sets path
+            try{f.createNewFile();}catch (Exception e){System.out.println("asdasdasd");};
+            System.out.println("getCurrentDirectory(): "
+                    +  chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile() : "
+                    +  chooser.getSelectedFile());
+        }
+        else {
+            System.out.println("No Selection ");
+        }
     }
 }
