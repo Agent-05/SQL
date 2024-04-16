@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,16 +14,17 @@ public class studentPanel extends JPanel {
     JList<Student> studentList = new JList<Student>();
     public studentPanel(){
         this.setLayout(null);
-        this.setBounds(0,25,784,437);
+        this.setBounds(0,25,800,437);
         getNames();
         studentList.setListData(toArr(students));
         JScrollPane studentFrame = new JScrollPane(studentList);
         studentFrame.setBounds(10, 10, 280, 275);
         this.add(studentFrame);
 
-
+        JLabel ID = new JLabel("ID:");
         JLabel txt1 = new JLabel("First Name:");
         JLabel txt2 = new JLabel("Last Name:");
+        JTextField idName = new JTextField();
         JTextField fName = new JTextField();
         JTextField lName = new JTextField();
         JButton save = new JButton();
@@ -30,21 +32,45 @@ public class studentPanel extends JPanel {
         JButton deselect = new JButton();
         JButton delete = new JButton();
 
+        //Makes the Table Model Variables
+        String[] columnTitles = {"Section ID", "Course Title", "Teacher ID"};
+        String[][] data = {};
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnTitles){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+        //Makes the Jtable and sets the basic functions
+        JTable table = new JTable(tableModel);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
+        table.setFocusable(false);
+        //Adds a scroll panel to the tabel
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(510, 10, 280, 275);
+        scrollPane.setViewportView(table);
+        this.add(scrollPane);
+
+        txt1.setBounds(300, 60, 100, 25);
+        txt2.setBounds(300, 100, 100, 25);
+        ID.setBounds(300, 20, 100, 25);
 
 
-
-        txt1.setBounds(300, 20, 250, 25);
-        txt2.setBounds(300, 60, 250, 25);
-
-
-        fName.setBounds(400, 22, 100, 17);
-        lName.setBounds(400, 62, 100, 17);
+        fName.setBounds(400, 62, 100, 17);
+        idName.setBounds(400, 22, 100, 17);
+        lName.setBounds(400, 102, 100, 17);
         deselect.setBounds(300, 260, 200, 25);
         save.setBounds(300, 170, 200, 25);
-        clear.setBounds(300, 230, 200, 25);
-        delete.setBounds(300, 200, 200, 25);
+        clear.setBounds(300, 200, 200, 25);
+        delete.setBounds(300, 230, 200, 25);
+
+        idName.setFocusable(false);
 
         this.add(txt1);
+        this.add(ID);
+        this.add(idName);
         this.add(txt2);
         this.add(fName);
         this.add(lName);
@@ -57,6 +83,10 @@ public class studentPanel extends JPanel {
         save.setText("Save");
         clear.setText("Clear");
         delete.setText("Delete");
+
+        deselect.setVisible(false);
+        delete.setVisible(false);
+
 
 
 
@@ -111,6 +141,8 @@ public class studentPanel extends JPanel {
                 delete.setVisible(true);
                 fName.setText(student.getFn());
                 lName.setText(student.getLn());
+                String[] rowData = {"1", "2", "3"};
+                tableModel.addRow(rowData);
             }
         });
 
@@ -144,6 +176,11 @@ public class studentPanel extends JPanel {
         {
 
         }
+    }
+    public void loadData(DefaultTableModel table){
+        //I need you to pull every each course id and section id belonging to the student
+        //Ill then put the data into a row. If you could make it into a loop, itd be perfect
+
     }
 
 }
