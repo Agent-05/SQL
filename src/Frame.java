@@ -5,6 +5,10 @@ import java.io.File;
 import java.util.*;
 
 public class Frame extends JFrame {
+    teacherPanel tp=new teacherPanel(this);
+    studentPanel sp=new studentPanel(this);
+    coursePanel cp=new coursePanel(this);
+    sectionPanel secP =new sectionPanel(this);
     public static void main(String[] args){
         new Frame();
     }
@@ -17,10 +21,6 @@ public class Frame extends JFrame {
         this.setTitle("School Manager Program");
 
         JPanel mainPanel = new JPanel();
-        teacherPanel tp=new teacherPanel();
-        studentPanel sp=new studentPanel();
-        coursePanel cp=new coursePanel();
-        sectionPanel secP =new sectionPanel();
         aboutPanel ap =new aboutPanel();
 
         mainPanel.setBounds(0,25,784,437);
@@ -193,5 +193,21 @@ public class Frame extends JFrame {
         else {
             System.out.println("No Selection ");
         }
+    }
+
+    public teacherPanel getTp() {
+        return tp;
+    }
+
+    public studentPanel getStup() {
+        return sp;
+    }
+
+    public coursePanel getCp() {
+        return cp;
+    }
+
+    public sectionPanel getSecP() {
+        return secP;
     }
 }

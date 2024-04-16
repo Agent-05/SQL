@@ -1,9 +1,15 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class coursePanel extends JPanel {
-    public coursePanel(){
+    Frame parent = null;
+    public coursePanel(Frame parent){
+        this.parent = parent;
         this.setLayout(null);
         this.setBounds(0,25,800,437);
         //Makes the Table Model Variables
@@ -162,13 +168,30 @@ public class coursePanel extends JPanel {
                 deselect.setVisible(true);
                 delete.setVisible(true);
             }
-
         });
-
-
-
         this.setVisible(true);
+    }
 
+    public String getCourseName(int course_id)
+    {
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM course;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("id") == course_id)
+                {
+                    return rs.getString("title");
+                }
+            }
+            con.close();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "null";
     }
 
 }

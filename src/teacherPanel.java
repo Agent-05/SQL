@@ -13,7 +13,9 @@ import java.sql.*;
 public class teacherPanel extends JPanel {
     ArrayList<Teacher> teachers = new ArrayList<Teacher>();
     JList<Teacher> teacherList = new JList<Teacher>();
-    public teacherPanel(){
+    Frame parent = null;
+    public teacherPanel(Frame parent){
+        this.parent = parent;
         this.setLayout(null);
         this.setBounds(0,25,800,437);
         getNames();
@@ -141,6 +143,7 @@ public class teacherPanel extends JPanel {
         teacherList.addListSelectionListener(e -> {
             Teacher teacher = teacherList.getSelectedValue();
             if (teacher != null) {
+                loadData(teacherList.getSelectedValue().id);
                 deselect.setVisible(true);
                 delete.setVisible(true);
                 fName.setText(teacher.getFn());
@@ -185,7 +188,11 @@ public class teacherPanel extends JPanel {
 
         }
     }
-    public void loadData(DefaultTableModel table){
+    public void loadData(/*DefaultTableModel table,*/ int teacherID){
+        int sectionID = parent.getSecP().getTeacherSectionId(teacherID);//gets section ID
+        int courseID = parent.getSecP().getTeacherSectionId(teacherID);//gets the id needed to find course name
+        String course = parent.getCp().getCourseName(courseID);
+        System.out.println("Section ID: " + sectionID + "\n Course ID: " + courseID + "\nCourse: " + course);
         //I need you to pull every each course id and section id belonging to the teacher
         //Ill then put the data into a row. If you could make it into a loop, itd be perfect
 

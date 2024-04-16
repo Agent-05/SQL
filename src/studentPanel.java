@@ -11,8 +11,10 @@ import java.sql.*;
 
 public class studentPanel extends JPanel {
     ArrayList<Student> students = new ArrayList<Student>();
+    Frame parent = null;
     JList<Student> studentList = new JList<Student>();
-    public studentPanel(){
+    public studentPanel(Frame parent){
+        this.parent = parent;
         this.setLayout(null);
         this.setBounds(0,25,800,437);
         getNames();
