@@ -16,7 +16,7 @@ public class sectionPanel extends JPanel {
         JList<Section> jList = new JList<>();
         jList.setListData(toArr(sections));
         JScrollPane sectionsPane = new JScrollPane(jList);
-        sectionsPane.setBounds(10, 10, 280, 275);
+        sectionsPane.setBounds(10, 140, 280, 175);
         this.add(sectionsPane);
 
         //Makes the Table Model Variables
@@ -36,41 +36,28 @@ public class sectionPanel extends JPanel {
         table.setFocusable(false);
         //Adds a scroll panel to the tabel
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(510, 10, 280, 275);
+        scrollPane.setBounds(300, 15, 250, 300);
         scrollPane.setViewportView(table);
         this.add(scrollPane);
 
         JLabel txt1 = new JLabel("Teachers:");
         JLabel txt2 = new JLabel("Courses:");
+        JLabel txt3 = new JLabel("Available Sections:");
+        JLabel txt4 = new JLabel("Students:");
         JComboBox<Teacher> teachers = new JComboBox<>();
         JComboBox<Course> courses = new JComboBox<>();
-        JButton save = new JButton();
-        JButton clear = new JButton();
-        JButton deselect = new JButton();
-        JButton delete = new JButton();
 
-        txt1.setBounds(370, 10, 100, 25);
-        txt2.setBounds(370, 60, 100, 25);
-        teachers.setBounds(350, 40, 100, 17);
-        courses.setBounds(350, 90, 100, 17);
-        deselect.setBounds(300, 260, 200, 25);
-        save.setBounds(300, 170, 200, 25);
-        clear.setBounds(300, 200, 200, 25);
-        delete.setBounds(300, 230, 200, 25);
+        txt1.setBounds(120, 10, 100, 25);
+        txt2.setBounds(120, 60, 100, 25);
+        txt3.setBounds(100, 110, 200, 25);
+        teachers.setBounds(50, 40, 200, 17);
+        courses.setBounds(50, 90, 200, 17);
+
         this.add(txt1);
         this.add(txt2);
+        this.add(txt3);
         this.add(teachers);
         this.add(courses);
-        this.add(save);
-        this.add(clear);
-        this.add(deselect);
-        this.add(delete);
-        deselect.setText("Deselect");
-        save.setText("Save");
-        clear.setText("Clear");
-        delete.setText("Delete");
-        deselect.setVisible(false);
-        delete.setVisible(false);
 
 
     }

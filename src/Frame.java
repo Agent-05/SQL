@@ -17,7 +17,7 @@ public class Frame extends JFrame {
         this.setSize(815,400);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setTitle("School Manager Program");
 
         JPanel mainPanel = new JPanel();
