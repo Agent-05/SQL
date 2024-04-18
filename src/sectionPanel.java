@@ -68,48 +68,5 @@ public class sectionPanel extends JPanel {
         }
         return array;
     }
-    public int getTeacherSectionId(int teacher_id)
-    {
-        try{
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
-            Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM section;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("teacher_id") == teacher_id)
-                {
-                    return rs.getInt("id");
-                }
-            }
-            con.close();
-
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public int getTeacherCourseId(int teacher_id)
-    {
-        try{
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
-            Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM section;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("teacher_id") == teacher_id)
-                {
-                    return rs.getInt("course_id");
-                }
-            }
-            con.close();
-
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return -1;
-    }
 
 }
