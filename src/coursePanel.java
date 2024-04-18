@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class coursePanel extends JPanel {
@@ -172,26 +173,68 @@ public class coursePanel extends JPanel {
         this.setVisible(true);
     }
 
-    public String getCourseName(int course_id)
-    {
+
+    public void loadSectionData(/*DefaultTableModel table,*/ int teacherID, int courseID){
+        ArrayList<Integer> sectionID = new ArrayList<>();
+        ArrayList<Student> students = new ArrayList<>();
+
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM course;");
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
             while(rs!=null && rs.next())
             {
-                if(rs.getInt("id") == course_id)
+                if(rs.getInt("teacher_id") == teacherID && rs.getInt("course_id") == courseID)
                 {
-                    return rs.getString("title");
+                    //looking for section id
+                    sectionID.add(rs.getInt("section_id"));
                 }
             }
+            //use sectionID and students
             con.close();
 
         }catch(Exception e)
         {
             e.printStackTrace();
         }
-        return "null";
     }
+
+
+    public void loadStudentData(/*DefaultTableModel table,*/ int sectionID){
+        ArrayList<Student> students = new ArrayList<>();
+        ArrayList<Integer> studentID = new ArrayList<>();
+
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM enrollment;");
+            //goes through enrollment and sees if section ID matches then pull student id called "id"
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("section_id") == sectionID)
+                {
+                    studentID.add(rs.getInt("id"));
+                }
+            }
+            //use sectionID and students
+            con.close();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        ArrayList<Student> h = parent.getStup().students;
+        for(Integer a: studentID)
+        {
+             for(Student j: h )
+             {
+                 if(j.getId() == a)//if id in list matches student id
+                 {
+                     students.add(j);
+                 }
+             }
+        }
+    }
+
 
 }

@@ -179,10 +179,52 @@ public class studentPanel extends JPanel {
 
         }
     }
-    public void loadData(DefaultTableModel table){
-        //I need you to pull every each course id and section id belonging to the student
-        //Ill then put the data into a row. If you could make it into a loop, itd be perfect
 
+    public void loadData(/*DefaultTableModel table,*/ int studentID){
+        int sectionID = -1;
+        int teacherID = -1;
+        int courseID = -1;
+        String courseName = "";
+
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM enrollment;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("student_id") == studentID)
+                {
+                    //looking for section id
+                    sectionID = rs.getInt("section_id");
+                }
+            }
+            rs = s.executeQuery("SELECT * FROM section;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("section_id") == sectionID)
+                {
+                    //looking for teacher and course id
+                    teacherID = rs.getInt("teacher_id");
+                    courseID = rs.getInt("course_id");
+                }
+            }
+            rs = s.executeQuery("SELECT * FROM course;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("course_id") == courseID)
+                {
+                    //looking for courseName
+                    courseName = rs.getString("title");
+                }
+            }
+
+            //use courseName, teacher ID and sectionID
+            con.close();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -22,6 +22,9 @@ public class Frame extends JFrame {
 
         JPanel mainPanel = new JPanel();
         aboutPanel ap =new aboutPanel();
+        tp.getNames();
+        sp.getNames();
+
 
         mainPanel.setBounds(0,25,784,437);
         JLabel text1 = new JLabel("Choose a View");
@@ -210,4 +213,5 @@ public class Frame extends JFrame {
     public sectionPanel getSecP() {
         return secP;
     }
+
 }

@@ -18,9 +18,9 @@ public class teacherPanel extends JPanel {
         this.parent = parent;
         this.setLayout(null);
         this.setBounds(0,25,800,437);
-        getNames();
+        /*getNames();
         teacherList.setListData(toArr(teachers));
-        JScrollPane teacherFrame = new JScrollPane(teacherList);
+        */JScrollPane teacherFrame = new JScrollPane(teacherList);
         teacherFrame.setBounds(10, 10, 280, 275);
         this.add(teacherFrame);
 
@@ -188,14 +188,41 @@ public class teacherPanel extends JPanel {
 
         }
     }
-    public void loadData(/*DefaultTableModel table,*/ int teacherID){
-        int sectionID = parent.getSecP().getTeacherSectionId(teacherID);//gets section ID
-        int courseID = parent.getSecP().getTeacherSectionId(teacherID);//gets the id needed to find course name
-        String course = parent.getCp().getCourseName(courseID);
-        System.out.println("Section ID: " + sectionID + "\n Course ID: " + courseID + "\nCourse: " + course);
-        //I need you to pull every each course id and section id belonging to the teacher
-        //Ill then put the data into a row. If you could make it into a loop, itd be perfect
 
+    public void loadData(/*DefaultTableModel table,*/ int teacherID){
+        int sectionID = -1;
+        int courseID = -1;
+        String courseName = null;
+
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("teacher_id") == teacherID)
+                {
+                    sectionID = rs.getInt("section_id");
+                    courseID = rs.getInt("course_id");
+                }
+            }
+            rs = s.executeQuery("SELECT * FROM course;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("section_id") == sectionID)
+                {
+                    courseName = rs.getString("title");
+                }
+            }
+
+            //use sectionID, course title
+            con.close();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }
