@@ -115,7 +115,7 @@ public class coursePanel extends JPanel {
                 if (!fName.getText().isEmpty() && group.getSelection() != null){
                     String[] newEntry = { "" + temporaryID, fName.getText(), group.getSelection().getActionCommand()};
                     tableModel.addRow(newEntry);
-                    temporaryID.set(temporaryID.get() + 1);
+                    temporaryID.set(temporaryID.get() + 1); 
                 }
             }
             else{

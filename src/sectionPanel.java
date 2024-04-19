@@ -19,6 +19,14 @@ public class sectionPanel extends JPanel {
         sectionsPane.setBounds(10, 140, 280, 175);
         this.add(sectionsPane);
 
+        ArrayList<Student> students = parent.sp.students;
+
+        JList<Student> studentJList = new JList<>(toArr2(students));
+        JScrollPane studentsPane = new JScrollPane(studentJList);
+        studentsPane.setBounds(560, 14, 230, 175);
+        this.add(studentsPane);
+
+
         //Makes the Table Model Variables
         String[] columnTitles = {"Student Last", "Student First", "Student ID"};
         String[][] data = {};
@@ -63,6 +71,14 @@ public class sectionPanel extends JPanel {
     }
     public static Section[] toArr(ArrayList<Section> list){
         Section[] array = new Section[list.size()];
+        for (int i = 0; i < list.size(); i++){
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static Student[] toArr2(ArrayList<Student> list){
+        Student[] array = new Student[list.size()];
         for (int i = 0; i < list.size(); i++){
             array[i] = list.get(i);
         }
