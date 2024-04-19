@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 
 public class Frame extends JFrame {
@@ -9,6 +10,7 @@ public class Frame extends JFrame {
     studentPanel sp=new studentPanel(this);
     coursePanel cp=new coursePanel(this);
     sectionPanel secP =new sectionPanel(this);
+    enrollmentManager enrollmentManager = new enrollmentManager();
     public static void main(String[] args){
         new Frame();
     }
@@ -186,8 +188,14 @@ public class Frame extends JFrame {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//only a folder can be chosen to be exported to
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File f = new File(chooser.getCurrentDirectory() + "\\School Manager Data.txt");//sets path
-            try{f.createNewFile();}catch (Exception e){System.out.println("asdasdasd");};
+            try{
+                File f = new File(chooser.getCurrentDirectory() + "\\School Manager Data1.txt");//sets path
+                f.createNewFile();
+                //sets path
+                FileWriter myWriter = new FileWriter(f);
+                myWriter.write(createTextFile());
+                myWriter.close();
+            }catch (Exception e){System.out.println("Error creating file");};
             System.out.println("getCurrentDirectory(): "
                     +  chooser.getCurrentDirectory());
             System.out.println("getSelectedFile() : "
@@ -198,20 +206,42 @@ public class Frame extends JFrame {
         }
     }
 
-    public teacherPanel getTp() {
-        return tp;
-    }
 
     public studentPanel getStup() {
         return sp;
     }
 
-    public coursePanel getCp() {
-        return cp;
-    }
 
-    public sectionPanel getSecP() {
-        return secP;
+    public String createTextFile(){
+        String newFile = "";
+        ArrayList<Enrollment> e = enrollmentManager.enrollment;
+        ArrayList<Student> s = sp.students;
+        ArrayList<Teacher> t = tp.teachers;
+        ArrayList<Section> x = secP.sections;
+        ArrayList<Course> c = cp.courses;
+        for(Enrollment a : e)
+        {
+            newFile += "INSERT INTO enrollment (id, student_id) VALUES ("+a.getId()+", "+a.getStudentId()+")\n";
+        }
+
+        for(Student a : s)
+        {
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getFn()+"\', \'"+a.getLn()+"\')\n";
+        }
+
+        for(Teacher a : t)
+        {
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getFn()+"\', \'"+a.getLn()+"\')\n";
+        }
+        for(Section a : x)
+        {
+            newFile += "INSERT INTO section (id, course_id, teacher_id) VALUES ("+a.getId()+", "+a.getCourseId()+", "+a.getTeacherId()+")\n";
+        }
+        for(Course a : c)
+        {
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getTitle()+"\', "+a.getDiff()+")\n";
+        }
+        return newFile;
     }
 
 }

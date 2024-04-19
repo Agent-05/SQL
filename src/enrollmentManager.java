@@ -8,7 +8,6 @@ public class enrollmentManager {
     ArrayList<Enrollment> enrollment = new ArrayList<Enrollment>();
 
 
-
     public void getNames(){
         enrollment.clear();
         try{

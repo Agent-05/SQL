@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class coursePanel extends JPanel {
+    ArrayList<Course> courses = new ArrayList<>();
     Frame parent = null;
     public coursePanel(Frame parent){
         this.parent = parent;
@@ -24,6 +25,7 @@ public class coursePanel extends JPanel {
             }
         };
         //Makes the Jtable and sets the basic functions
+        getNames();
         JTable table = new JTable(tableModel);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
@@ -115,7 +117,7 @@ public class coursePanel extends JPanel {
                 if (!fName.getText().isEmpty() && group.getSelection() != null){
                     String[] newEntry = { "" + temporaryID, fName.getText(), group.getSelection().getActionCommand()};
                     tableModel.addRow(newEntry);
-                    temporaryID.set(temporaryID.get() + 1); 
+                    temporaryID.set(temporaryID.get() + 1);
                 }
             }
             else{
@@ -174,9 +176,8 @@ public class coursePanel extends JPanel {
     }
 
 
-    public void loadSectionData(/*DefaultTableModel table,*/ int teacherID, int courseID){
+    public ArrayList<Integer> loadSectionData(/*DefaultTableModel table,*/ int teacherID, int courseID){
         ArrayList<Integer> sectionID = new ArrayList<>();
-        ArrayList<Student> students = new ArrayList<>();
 
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
@@ -197,10 +198,11 @@ public class coursePanel extends JPanel {
         {
             e.printStackTrace();
         }
+        return sectionID;
     }
 
 
-    public void loadStudentData(/*DefaultTableModel table,*/ int sectionID){
+    public ArrayList<Student> loadStudentData(/*DefaultTableModel table,*/ int sectionID){
         ArrayList<Student> students = new ArrayList<>();
         ArrayList<Integer> studentID = new ArrayList<>();
 
@@ -226,13 +228,37 @@ public class coursePanel extends JPanel {
         ArrayList<Student> h = parent.getStup().students;
         for(Integer a: studentID)
         {
-             for(Student j: h )
-             {
-                 if(j.getId() == a)//if id in list matches student id
-                 {
-                     students.add(j);
-                 }
-             }
+            for(Student j: h )
+            {
+                if(j.getId() == a)//if id in list matches student id
+                {
+                    students.add(j);
+                }
+            }
+        }
+
+        return h;
+    }
+
+
+    public void getNames(){
+        courses.clear();
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
+            while(rs!=null&&rs.next())
+            {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                int diff = rs.getInt("diff");
+                Course existingCourse = new Course(id, title, diff);//pass in an id to not create a new student but just get one instead
+                courses.add(existingCourse);
+            }
+            con.close();
+        }catch(Exception e)
+        {
+
         }
     }
 

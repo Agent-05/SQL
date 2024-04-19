@@ -7,12 +7,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class sectionPanel extends JPanel {
+    ArrayList<Section> sections = new ArrayList<>();
     Frame parent = null;
     public sectionPanel(Frame parent){
         this.parent = parent;
+        getNames();
         this.setLayout(null);
         this.setBounds(0,25,800,437);
-        ArrayList<Section> sections = new ArrayList<>();
         JList<Section> jList = new JList<>();
         jList.setListData(toArr(sections));
         JScrollPane sectionsPane = new JScrollPane(jList);
@@ -69,6 +70,28 @@ public class sectionPanel extends JPanel {
 
 
     }
+
+    public void getNames(){
+        sections.clear();
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
+            while(rs!=null&&rs.next())
+            {
+                int id = rs.getInt("id");
+                int course_id = rs.getInt("course_id");
+                int teacher_id = rs.getInt("teacher_id");
+                Section existingSection = new Section(id, course_id, teacher_id);//pass in an id to not create a new student but just get one instead
+                sections.add(existingSection);
+            }
+            con.close();
+        }catch(Exception e)
+        {
+
+        }
+    }
+
     public static Section[] toArr(ArrayList<Section> list){
         Section[] array = new Section[list.size()];
         for (int i = 0; i < list.size(); i++){

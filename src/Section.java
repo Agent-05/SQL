@@ -67,7 +67,7 @@ public class Section {
         return id;
     }
 
-    public int getSectionId() {
+    public int getCourseId() {
         return course_id;
     }
     public int getTeacherId() {
@@ -78,7 +78,7 @@ public class Section {
     @Override
     public String toString()
     {
-        return getSectionId() + ", " + getTeacherId();
+        return getCourseId() + ", " + getTeacherId();
     }
 
 

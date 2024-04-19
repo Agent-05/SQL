@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+
 //id, title, type (integer) academic - 0, KAP-1, AP-2
 public class Course {
     //teacher teaches sections but the program handles that, the teacher doesnt need to know what 
@@ -7,7 +9,6 @@ public class Course {
     int id = -1;
     public String title = "default";
     int diff = -1;
-
     public Course(int id, String title, int type)
     {
         this.id = id;
