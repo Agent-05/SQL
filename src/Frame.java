@@ -116,6 +116,7 @@ public class Frame extends JFrame {
 
             this.add(secP);
             repaint();
+            secP.update();
         });
 
 

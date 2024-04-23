@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class sectionPanel extends JPanel {
     ArrayList<Section> sections = new ArrayList<>();
+    JComboBox<Teacher> teachers = new JComboBox<>();
+    JComboBox<Course> courses = new JComboBox<>();
     Frame parent = null;
     public sectionPanel(Frame parent){
         this.parent = parent;
@@ -53,8 +55,6 @@ public class sectionPanel extends JPanel {
         JLabel txt2 = new JLabel("Courses:");
         JLabel txt3 = new JLabel("Available Sections:");
         JLabel txt4 = new JLabel("Students:");
-        JComboBox<Teacher> teachers = new JComboBox<>();
-        JComboBox<Course> courses = new JComboBox<>();
 
         txt1.setBounds(120, 10, 100, 25);
         txt2.setBounds(120, 60, 100, 25);
@@ -68,16 +68,6 @@ public class sectionPanel extends JPanel {
         this.add(teachers);
         this.add(courses);
 
-
-        ArrayList<Teacher> teachersArraylist = parent.tp.teachers;
-        ArrayList<Course> courseArraylist = parent.cp.courses;
-
-        for (Teacher a: teachersArraylist){
-            teachers.addItem(a);
-        }
-        for (Course a: courseArraylist){
-            courses.addItem(a);
-        }
 
 
     }
@@ -117,6 +107,21 @@ public class sectionPanel extends JPanel {
             array[i] = list.get(i);
         }
         return array;
+    }
+
+    public void update()
+    {
+        ArrayList<Teacher> teachersArraylist = parent.tp.teachers;
+        ArrayList<Course> courseArraylist = parent.cp.courses;
+        teachers.removeAllItems();
+        courses.removeAllItems();
+
+        for (Teacher a: teachersArraylist){
+            teachers.addItem(a);
+        }
+        for (Course a: courseArraylist){
+            courses.addItem(a);
+        }
     }
 
 }
