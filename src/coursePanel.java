@@ -95,9 +95,9 @@ public class coursePanel extends JPanel {
         group.add(ap);
         group.add(kap);
 
-        aca.setActionCommand("Academic");
-        ap.setActionCommand("AP");
-        kap.setActionCommand("KAP");
+        aca.setActionCommand("0");
+        ap.setActionCommand("1");
+        kap.setActionCommand("2");
 
         this.add(aca);
         this.add(ap);
@@ -115,7 +115,20 @@ public class coursePanel extends JPanel {
         save.addActionListener(e-> {
             if (idName.getText().isEmpty()){
                 if (!fName.getText().isEmpty() && group.getSelection() != null){
-                    String[] newEntry = { "" + temporaryID, fName.getText(), group.getSelection().getActionCommand()};
+                    Course newEntry1 = new Course(fName.getText(), Integer.getInteger(group.getSelection().getActionCommand()));
+                    String diff = "";
+                    switch (newEntry1.getDiff()){
+                        case 0 -> {
+                            diff = "Academic";
+                        }
+                        case 1 -> {
+                            diff = "AP";
+                        }
+                        case 2 -> {
+                            diff = "KAP";
+                        }
+                    }
+                    String[] newEntry = { Integer.toString(newEntry1.getId()), fName.getText(), diff};
                     tableModel.addRow(newEntry);
                     temporaryID.set(temporaryID.get() + 1);
                 }
