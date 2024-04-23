@@ -69,6 +69,17 @@ public class sectionPanel extends JPanel {
         this.add(courses);
 
 
+        ArrayList<Teacher> teachersArraylist = parent.tp.teachers;
+        ArrayList<Course> courseArraylist = parent.cp.courses;
+
+        for (Teacher a: teachersArraylist){
+            teachers.addItem(a);
+        }
+        for (Course a: courseArraylist){
+            courses.addItem(a);
+        }
+
+
     }
 
     public void getNames(){
