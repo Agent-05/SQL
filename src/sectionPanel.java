@@ -19,7 +19,7 @@ public class sectionPanel extends JPanel {
         JList<Section> jList = new JList<>();
         jList.setListData(toArr(sections));
         JScrollPane sectionsPane = new JScrollPane(jList);
-        sectionsPane.setBounds(10, 140, 280, 175);
+        sectionsPane.setBounds(10, 140, 280, 135);
         this.add(sectionsPane);
 
         ArrayList<Student> students = parent.sp.students;
@@ -75,15 +75,19 @@ public class sectionPanel extends JPanel {
 
         JButton add = new JButton("Add");
         JButton remove = new JButton("Remove");
+        JButton deselect = new JButton("Deselect");
 
+        deselect.setBounds(10, 285, 280, 28);
         add.setBounds(560, 220, 110, 94);
         remove.setBounds(679, 220, 110, 94);
 
         add.setFocusable(false);
         remove.setFocusable(false);
+        deselect.setFocusable(false);
 
         this.add(add);
         this.add(remove);
+        this.add(deselect);
 
         //everything is layed out
 
@@ -95,8 +99,9 @@ public class sectionPanel extends JPanel {
                     Student student = studentJList.getSelectedValue();
                     Section newSection = new Section(course.getId(), teacher.getId());
                     sections.add(newSection);
-                    jList.setListData(toArr(sections));
                     getNames();
+                    jList.setListData(toArr(sections));
+                    Enrollment enrollment = new Enrollment(newSection.getId(), student.getId());
                     String[] entry = {student.getLn(), student.getFn(), "" +student.getId()};
                     tableModel.addRow(entry);
                 }
@@ -120,7 +125,20 @@ public class sectionPanel extends JPanel {
         });
 
         jList.addListSelectionListener(e -> {
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
             if (!e.getValueIsAdjusting()){
+                if (jList.getSelectedValue() != null) {
+                    Section section = jList.getSelectedValue();
+                    int sectionId = section.getId();
+                }
+            }
+        });
+
+        deselect.addActionListener(e -> {
+            if (jList.getSelectedValue() != null){
+                jList.clearSelection();
 
             }
         });
@@ -177,5 +195,6 @@ public class sectionPanel extends JPanel {
             courses.addItem(a);
         }
     }
+
 
 }

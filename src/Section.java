@@ -27,10 +27,9 @@ public class Section {
 
             try{
                 s.execute("INSERT INTO section (course_id, teacher_id) VALUES ("+course_id+", "+teacher_id+")");
-                ResultSet rs = s.executeQuery("SELECT course_id, teacher_id FROM section;");
+                System.out.println("Help");
+                ResultSet rs = s.executeQuery("SELECT * FROM section WHERE id=(SELECT max(id) FROM section);");
                 id = rs.getInt("id");
-
-                System.out.println(id);
             }
             catch(Exception e)
             {

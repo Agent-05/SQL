@@ -9,6 +9,7 @@ public class Enrollment {
     {
         this.id = id;
         this.student_id = student_id;
+        addEnrollment();
     }
     public Enrollment(int student_id)
     {
@@ -20,10 +21,14 @@ public class Enrollment {
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            s.execute("CREATE table if not exists enrollment(id INTEGER NOT NULL AUTO_INCREMENT, student_id INTEGER NOT NULL, PRIMARY KEY(id));");
+            s.execute("CREATE table if not exists enrollment(id INTEGER NOT NULL, student_id INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO enrollment (id, student_id) VALUES ("+student_id+")");
+                System.out.println(id);
+                System.out.println("If you see this, you need to fix sections, the id isnt updating correctly. Dont delete the select from max value line because it currently makes the jlist work");
+                s.execute("INSERT INTO enrollment (id, student_id) VALUES ("+id+", "+student_id+")");
+                System.out.println("Workpl2s");
+
             }
             catch(Exception e)
             {
