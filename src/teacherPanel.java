@@ -100,11 +100,14 @@ public class teacherPanel extends JPanel {
         save.addActionListener(e -> {
             if (!fName.getText().isEmpty() && !lName.getText().isEmpty()) {
                 if (teacherList.isSelectionEmpty()) {
-                        Teacher teacher = new Teacher(fName.getText(),lName.getText());
-                        teachers.add(teacher);
-                        teacherList.setListData(toArr(teachers));
-                        getNames();
-                } else {
+                    Teacher teacher = new Teacher(fName.getText(),lName.getText());
+                    teachers.add(teacher);
+                    teacherList.setListData(toArr(teachers));
+                    fName.setText("");
+                    lName.setText("");
+                    getNames();
+                }
+                else {
                     Teacher teacher = teacherList.getSelectedValue();
                     teacher.updateTeacher(teacher.getId(), fName.getText(), lName.getText());
                     teacherList.setListData(toArr(teachers));
@@ -112,6 +115,7 @@ public class teacherPanel extends JPanel {
                     lName.setText("");
                     deselect.setVisible(false);
                     delete.setVisible(false);
+                    idName.setText("");
                 }
             }
         });
@@ -124,9 +128,13 @@ public class teacherPanel extends JPanel {
         deselect.addActionListener(e -> {
             teacherList.clearSelection();
             fName.setText("");
+            idName.setText("");
             lName.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
         });
 
         delete.addActionListener(e -> {
@@ -134,22 +142,34 @@ public class teacherPanel extends JPanel {
             teacher.updateTeacher(teacher.getId(), "-", "");
             teachers.remove(teacher);
             teacherList.setListData(toArr(teachers));
+            idName.setText("");
             fName.setText("");
             lName.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
         });
 
         teacherList.addListSelectionListener(e -> {
-            Teacher teacher = teacherList.getSelectedValue();
-            if (teacher != null) {
-                loadData(teacherList.getSelectedValue().id);
-                deselect.setVisible(true);
-                delete.setVisible(true);
-                fName.setText(teacher.getFn());
-                lName.setText(teacher.getLn());
-                String[] rowData = {"1", "2"};
-                tableModel.addRow(rowData);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
+            if (!e.getValueIsAdjusting()) {
+                Teacher teacher = teacherList.getSelectedValue();
+                if (teacher != null) {
+                    loadData(teacherList.getSelectedValue().id);
+                    idName.setText("" + teacher.getId());
+                    deselect.setVisible(true);
+                    delete.setVisible(true);
+                    fName.setText(teacher.getFn());
+                    lName.setText(teacher.getLn());
+                    String[] entry = loadData(teacher.getId());
+                    if (entry != null) {
+                        tableModel.addRow(entry);
+                    }
+                }
             }
         });
 
@@ -189,11 +209,10 @@ public class teacherPanel extends JPanel {
         }
     }
 
-    public void loadData(/*DefaultTableModel table,*/ int teacherID){
+    public String[] loadData(/*DefaultTableModel table,*/ int teacherID){
         int sectionID = -1;
         int courseID = -1;
         String courseName = null;
-
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
@@ -203,14 +222,14 @@ public class teacherPanel extends JPanel {
             {
                 if(rs.getInt("teacher_id") == teacherID)
                 {
-                    sectionID = rs.getInt("section_id");
+                    sectionID = rs.getInt("id");
                     courseID = rs.getInt("course_id");
                 }
             }
             rs = s.executeQuery("SELECT * FROM course;");
             while(rs!=null && rs.next())
             {
-                if(rs.getInt("section_id") == sectionID)
+                if(rs.getInt("id") == courseID)
                 {
                     courseName = rs.getString("title");
                 }
@@ -223,6 +242,11 @@ public class teacherPanel extends JPanel {
         {
             e.printStackTrace();
         }
+        if (sectionID != -1) {
+            String[] entry = {"" + sectionID, "" + courseName};
+            return entry;
+        }
+        return null;
     }
 
 }

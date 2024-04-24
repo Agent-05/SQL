@@ -26,7 +26,11 @@ public class Section {
             s.execute("CREATE table if not exists section(id INTEGER NOT NULL AUTO_INCREMENT, course_id INTEGER NOT NULL, teacher_id INTEGER NOT NULL, PRIMARY KEY(id));");
 
             try{
-                s.execute("INSERT INTO section (id, course_id, teacher_id) VALUES ("+course_id+", "+teacher_id+")");
+                s.execute("INSERT INTO section (course_id, teacher_id) VALUES ("+course_id+", "+teacher_id+")");
+                ResultSet rs = s.executeQuery("SELECT course_id, teacher_id FROM section;");
+                id = rs.getInt("id");
+
+                System.out.println(id);
             }
             catch(Exception e)
             {
@@ -78,7 +82,7 @@ public class Section {
     @Override
     public String toString()
     {
-        return getCourseId() + ", " + getTeacherId();
+        return "" + getId();
     }
 
 

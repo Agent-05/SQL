@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Style;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,6 +27,8 @@ public class coursePanel extends JPanel {
         };
         //Makes the Jtable and sets the basic functions
         getNames();
+
+
         JTable table = new JTable(tableModel);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
@@ -102,52 +105,96 @@ public class coursePanel extends JPanel {
         this.add(aca);
         this.add(ap);
         this.add(kap);
-        String[] test = {"12344234", "2", "AP"};
-        tableModel.addRow(test);
-
         //All items have been layed out on the panel
-
-
-        //This is going to be replaced by the SQL id generation
-        AtomicInteger temporaryID = new AtomicInteger(1);
-
+        //Loading all the names into the jtable
+        for (Course a: courses){
+            String id = "" + a.getId();
+            String ldiff = "" + a.getDiff();
+            String name = a.getTitle();
+            String diff = "";
+            switch (ldiff){
+                case "0" -> {
+                    diff = "Academic";
+                }
+                case "1" -> {
+                    diff = "AP";
+                }
+                case "2" -> {
+                    diff = "KAP";
+                }
+            }
+            String[] entry = {id, name, diff};
+            tableModel.addRow(entry);
+        }
 
         save.addActionListener(e-> {
             if (idName.getText().isEmpty()){
                 if (!fName.getText().isEmpty() && group.getSelection() != null){
-                    Course newEntry1 = new Course(fName.getText(), Integer.getInteger(group.getSelection().getActionCommand()));
+                    String difficulty = group.getSelection().getActionCommand();
                     String diff = "";
-                    switch (newEntry1.getDiff()){
-                        case 0 -> {
+                    int entrySet = 0;
+                    switch (difficulty){
+                        case "0" -> {
                             diff = "Academic";
+                            entrySet = 0;
                         }
-                        case 1 -> {
+                        case "1" -> {
                             diff = "AP";
+                            entrySet = 1;
                         }
-                        case 2 -> {
+                        case "2" -> {
                             diff = "KAP";
+                            entrySet = 2;
                         }
+
                     }
+                    System.out.println(entrySet);
+                    Course newEntry1 = new Course(fName.getText(), entrySet);
+
                     String[] newEntry = { Integer.toString(newEntry1.getId()), fName.getText(), diff};
                     tableModel.addRow(newEntry);
-                    temporaryID.set(temporaryID.get() + 1);
                 }
             }
             else{
                 int row = table.getSelectedRow();
+                Course entry = courses.get(row);
+                String difEntry = group.getSelection().getActionCommand();
+                int entryD = -1;
+                String tableD = "";
+                switch (difEntry){
+                    case "0" -> {
+                        entryD = 0;
+                        tableD = "Academic";
+                    }
+                    case "1" -> {
+                        entryD = 1;
+                        tableD = "AP";
+                    }
+                    case "2" -> {
+                        entryD = 2;
+                        tableD = "KAP";
+                    }
+                }
+                entry.updateCourse(entry.getId(), fName.getText(), entryD);
                 table.setValueAt(fName.getText(), row, 1);
-                table.setValueAt(group.getSelection().getActionCommand(), row, 2);
+                table.setValueAt(tableD, row, 2);
             }
 
         });
 
         delete.addActionListener(e-> {
             int row = table.getSelectedRow();
+            Course entry = courses.get(row);
+            entry.updateCourse(entry.getId(), "-", entry.getDiff());
             tableModel.removeRow(row);
+            courses.remove(entry);
             fName.setText("");
             group.clearSelection();
             idName.setText("");
             table.clearSelection();
+            deselect.setVisible(false);
+            delete.setVisible(false);
+
         });
 
         deselect.addActionListener(e-> {
@@ -155,6 +202,9 @@ public class coursePanel extends JPanel {
             group.clearSelection();
             idName.setText("");
             table.clearSelection();
+            delete.setVisible(false);
+            deselect.setVisible(false);
+
         });
 
         clear.addActionListener(e-> {
@@ -259,7 +309,7 @@ public class coursePanel extends JPanel {
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM section;");
+            ResultSet rs = s.executeQuery("SELECT * FROM course;");
             while(rs!=null&&rs.next())
             {
                 int id = rs.getInt("id");

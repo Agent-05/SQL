@@ -91,25 +91,27 @@ public class studentPanel extends JPanel {
 
 
 
-
-
-
         save.addActionListener(e -> {
-            if (!fName.getText().isEmpty() || !lName.getText().isEmpty()) {
+            if (!fName.getText().isEmpty() && !lName.getText().isEmpty()) {
                 if (studentList.isSelectionEmpty()) {
-                        Student student = new Student(fName.getText(),lName.getText());
-                        students.add(student);
-                        getNames();
-                    }
-                } else {
+                    Student student = new Student(fName.getText(),lName.getText());
+                    students.add(student);
+                    studentList.setListData(toArr(students));
+                    fName.setText("");
+                    lName.setText("");
+                    getNames();
+                }
+                else {
                     Student student = studentList.getSelectedValue();
                     student.updateStudent(student.getId(), fName.getText(), lName.getText());
+                    studentList.setListData(toArr(students));
+                    fName.setText("");
+                    lName.setText("");
+                    deselect.setVisible(false);
+                    delete.setVisible(false);
+                    idName.setText("");
+                }
             }
-            studentList.setListData(toArr(students));
-            fName.setText("");
-            lName.setText("");
-            deselect.setVisible(false);
-            delete.setVisible(false);
         });
 
         clear.addActionListener(e -> {
@@ -121,8 +123,12 @@ public class studentPanel extends JPanel {
             studentList.clearSelection();
             fName.setText("");
             lName.setText("");
+            idName.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
         });
 
         delete.addActionListener(e -> {
@@ -132,19 +138,31 @@ public class studentPanel extends JPanel {
             studentList.setListData(toArr(students));
             fName.setText("");
             lName.setText("");
+            idName.setText("");
             deselect.setVisible(false);
             delete.setVisible(false);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
         });
 
         studentList.addListSelectionListener(e -> {
-            Student student = studentList.getSelectedValue();
-            if (student != null) {
-                deselect.setVisible(true);
-                delete.setVisible(true);
-                fName.setText(student.getFn());
-                lName.setText(student.getLn());
-                String[] rowData = {"1", "2", "3"};
-                tableModel.addRow(rowData);
+            for (int i = tableModel.getRowCount(); i > 0; i--){
+                tableModel.removeRow(i-1);
+            }
+            if (!e.getValueIsAdjusting()) {
+                Student student = studentList.getSelectedValue();
+                if (student != null) {
+                    deselect.setVisible(true);
+                    delete.setVisible(true);
+                    fName.setText(student.getFn());
+                    lName.setText(student.getLn());
+                    idName.setText("" + student.getId());
+                    String[] entry = loadData(student.getId());
+                    if (entry != null) {
+                        tableModel.addRow(entry);
+                    }
+                }
             }
         });
 
@@ -180,7 +198,7 @@ public class studentPanel extends JPanel {
         }
     }
 
-    public void loadData(/*DefaultTableModel table,*/ int studentID){
+    public String[] loadData(/*DefaultTableModel table,*/ int studentID){
         int sectionID = -1;
         int teacherID = -1;
         int courseID = -1;
@@ -225,6 +243,11 @@ public class studentPanel extends JPanel {
         {
             e.printStackTrace();
         }
+        if (sectionID != -1) {
+            String[] entry = {"" + sectionID, "" + courseName};
+            return entry;
+        }
+        return null;
     }
 
 }

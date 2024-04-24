@@ -26,7 +26,7 @@ public class sectionPanel extends JPanel {
 
         JList<Student> studentJList = new JList<>(toArr2(students));
         JScrollPane studentsPane = new JScrollPane(studentJList);
-        studentsPane.setBounds(560, 14, 230, 175);
+        studentsPane.setBounds(560, 34, 230, 175);
         this.add(studentsPane);
 
 
@@ -47,7 +47,7 @@ public class sectionPanel extends JPanel {
         table.setFocusable(false);
         //Adds a scroll panel to the tabel
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(300, 15, 250, 300);
+        scrollPane.setBounds(300, 35, 250, 280);
         scrollPane.setViewportView(table);
         this.add(scrollPane);
 
@@ -55,8 +55,11 @@ public class sectionPanel extends JPanel {
         JLabel txt2 = new JLabel("Courses:");
         JLabel txt3 = new JLabel("Available Sections:");
         JLabel txt4 = new JLabel("Students:");
+        JLabel txt5 = new JLabel("Roster:");
 
         txt1.setBounds(120, 10, 100, 25);
+        txt4.setBounds(650, 10, 100, 25);
+        txt5.setBounds(400, 10, 100, 25);
         txt2.setBounds(120, 60, 100, 25);
         txt3.setBounds(100, 110, 200, 25);
         teachers.setBounds(50, 40, 200, 17);
@@ -65,11 +68,62 @@ public class sectionPanel extends JPanel {
         this.add(txt1);
         this.add(txt2);
         this.add(txt3);
+        this.add(txt4);
+        this.add(txt5);
         this.add(teachers);
         this.add(courses);
 
+        JButton add = new JButton("Add");
+        JButton remove = new JButton("Remove");
 
+        add.setBounds(560, 220, 110, 94);
+        remove.setBounds(679, 220, 110, 94);
 
+        add.setFocusable(false);
+        remove.setFocusable(false);
+
+        this.add(add);
+        this.add(remove);
+
+        //everything is layed out
+
+        add.addActionListener(e -> {
+            if (jList.getSelectedValue() == null){
+                if (teachers.getSelectedItem() != null && courses.getSelectedItem() != null && studentJList.getSelectedValue() != null){
+                    Course course = (Course) courses.getSelectedItem();
+                    Teacher teacher = (Teacher) teachers.getSelectedItem();
+                    Student student = studentJList.getSelectedValue();
+                    Section newSection = new Section(course.getId(), teacher.getId());
+                    sections.add(newSection);
+                    jList.setListData(toArr(sections));
+                    getNames();
+                    String[] entry = {student.getLn(), student.getFn(), "" +student.getId()};
+                    tableModel.addRow(entry);
+                }
+            }
+            else{
+
+            }
+
+        });
+
+        remove.addActionListener(e -> {
+
+        });
+
+        teachers.addItemListener(e -> {
+
+        });
+
+        courses.addItemListener(e -> {
+
+        });
+
+        jList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()){
+
+            }
+        });
     }
 
     public void getNames(){

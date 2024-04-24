@@ -30,6 +30,8 @@ public class Course {
 
             try{
                 s.execute("INSERT INTO course (title, diff) VALUES (\'"+title+"\', "+diff+")");
+                ResultSet rs = s.executeQuery("SELECT title, diff FROM course;");
+                id = rs.getInt("id");
             }
             catch(Exception e)
             {
@@ -49,14 +51,16 @@ public class Course {
             {
                 if(rs.getInt("id") == id)
                 {
+                    System.out.println("Work1");
                     if(title.equals("-"))
                     {
                         s.execute("DELETE FROM course WHERE id="+id+";");
                     }else{
                         this.title = title;
                         this.diff = type;
-                        s.execute("UPDATE teacher SET title=\'"+title+"\' WHERE id="+id+";");
-                        s.execute("UPDATE teacher SET type="+id+" WHERE id="+id+";");
+                        s.execute("UPDATE course SET title=\'"+title+"\' WHERE id="+id+";");
+                        s.execute("UPDATE course SET diff="+diff+" WHERE id="+id+";");
+
                     }
                 }
             }
