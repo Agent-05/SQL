@@ -11,6 +11,16 @@ public class sectionPanel extends JPanel {
     JComboBox<Teacher> teachers = new JComboBox<>();
     JComboBox<Course> courses = new JComboBox<>();
     Frame parent = null;
+    //Makes the Table Model Variables
+    String[] columnTitles = {"Student Last", "Student First", "Student ID"};
+    String[][] data = {};
+    DefaultTableModel tableModel = new DefaultTableModel(data, columnTitles){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            //all cells false
+            return false;
+        }
+    };
     public sectionPanel(Frame parent){
         this.parent = parent;
         getNames();
@@ -30,16 +40,6 @@ public class sectionPanel extends JPanel {
         this.add(studentsPane);
 
 
-        //Makes the Table Model Variables
-        String[] columnTitles = {"Student Last", "Student First", "Student ID"};
-        String[][] data = {};
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnTitles){
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                //all cells false
-                return false;
-            }
-        };
         //Makes the Jtable and sets the basic functions
         JTable table = new JTable(tableModel);
         table.getTableHeader().setReorderingAllowed(false);
@@ -73,41 +73,71 @@ public class sectionPanel extends JPanel {
         this.add(teachers);
         this.add(courses);
 
-        JButton add = new JButton("Add");
-        JButton remove = new JButton("Remove");
+        JButton add = new JButton("Add Student");
+        JButton remove = new JButton("Remove Student");
         JButton deselect = new JButton("Deselect");
 
+        JButton addSection = new JButton("Add Section");
+        JButton removeSection = new JButton("Remove Section");
+
         deselect.setBounds(10, 285, 280, 28);
-        add.setBounds(560, 220, 110, 94);
-        remove.setBounds(679, 220, 110, 94);
+        add.setBounds(560, 220, 110, 40);
+        remove.setBounds(679, 220, 110, 40);
+        addSection.setBounds(560, 260, 110, 40);
+        removeSection.setBounds(679, 260, 110, 40);
 
         add.setFocusable(false);
         remove.setFocusable(false);
         deselect.setFocusable(false);
+        addSection.setFocusable(false);
+        removeSection.setFocusable(false);
 
         this.add(add);
         this.add(remove);
         this.add(deselect);
+        this.add(addSection);
+        this.add(removeSection);
 
         //everything is layed out
 
-        add.addActionListener(e -> {
-            if (jList.getSelectedValue() == null){
-                if (teachers.getSelectedItem() != null && courses.getSelectedItem() != null && studentJList.getSelectedValue() != null){
+        addSection.addActionListener(e -> {
+                if (teachers.getSelectedItem() != null && courses.getSelectedItem() != null){
                     Course course = (Course) courses.getSelectedItem();
                     Teacher teacher = (Teacher) teachers.getSelectedItem();
-                    Student student = studentJList.getSelectedValue();
                     Section newSection = new Section(course.getId(), teacher.getId());
                     sections.add(newSection);
                     getNames();
                     jList.setListData(toArr(sections));
-                    Enrollment enrollment = new Enrollment(newSection.getId(), student.getId());
-                    String[] entry = {student.getLn(), student.getFn(), "" +student.getId()};
-                    tableModel.addRow(entry);
                 }
+            else{
+
+            }
+
+        });
+
+        removeSection.addActionListener(e -> {
+            if (jList.getSelectedValue() != null){
+                jList.getSelectedValue().updateSection(jList.getSelectedValue().getId(), -1, jList.getSelectedValue().getTeacherId());
+                getNames();
+                jList.setListData(toArr(sections));
             }
             else{
 
+            }
+
+        });
+
+        add.addActionListener(e -> {
+            if (jList.getSelectedValue() != null){
+                if (teachers.getSelectedItem() != null && courses.getSelectedItem() != null && studentJList.getSelectedValue() != null){
+                    Student student = studentJList.getSelectedValue();
+                    Section sectionToAdd = jList.getSelectedValue();
+                    getNames();
+                    Enrollment enrollment = new Enrollment(sectionToAdd.getId(), student.getId());
+                    updateTable(sectionToAdd.id);
+                }
+            }
+            else{
             }
 
         });
@@ -132,8 +162,10 @@ public class sectionPanel extends JPanel {
                 if (jList.getSelectedValue() != null) {
                     Section section = jList.getSelectedValue();
                     int sectionId = section.getId();
+                    updateTable(sectionId);
                 }
             }
+
         });
 
         deselect.addActionListener(e -> {
@@ -193,6 +225,44 @@ public class sectionPanel extends JPanel {
         }
         for (Course a: courseArraylist){
             courses.addItem(a);
+        }
+    }
+
+    public void updateTable(int sectionID)
+    {
+        ArrayList<Integer> g = new ArrayList<>();
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM enrollment;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("id") == sectionID)
+                {
+                    g.add(rs.getInt("student_id"));
+                }
+            }
+
+            rs = s.executeQuery("SELECT * FROM student;");
+            while(rs!=null && rs.next())
+            {
+                for(Integer a: g)
+                {
+                    if(rs.getInt("id") == a)
+                    {
+                        //looking for section id
+                        String[] entry = {rs.getString("first_name"), "" + rs.getString("last_name"), "" + rs.getInt("id")};
+                        //String[] entry = {"" + rs.getInt("student_id"), "" + courseName};
+                        tableModel.addRow(entry);
+                    }
+                }
+            }
+            //use sectionID and students
+            con.close();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

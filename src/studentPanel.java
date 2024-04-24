@@ -212,14 +212,14 @@ public class studentPanel extends JPanel {
             {
                 if(rs.getInt("student_id") == studentID)
                 {
-                    //looking for section id
-                    sectionID = rs.getInt("section_id");
+                    //looking for id
+                    sectionID = rs.getInt("id");
                 }
             }
             rs = s.executeQuery("SELECT * FROM section;");
             while(rs!=null && rs.next())
             {
-                if(rs.getInt("section_id") == sectionID)
+                if(rs.getInt("id") == sectionID)
                 {
                     //looking for teacher and course id
                     teacherID = rs.getInt("teacher_id");
@@ -229,7 +229,7 @@ public class studentPanel extends JPanel {
             rs = s.executeQuery("SELECT * FROM course;");
             while(rs!=null && rs.next())
             {
-                if(rs.getInt("course_id") == courseID)
+                if(rs.getInt("id") == courseID)
                 {
                     //looking for courseName
                     courseName = rs.getString("title");
