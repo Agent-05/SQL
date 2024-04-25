@@ -244,7 +244,7 @@ public class studentPanel extends JPanel {
             e.printStackTrace();
         }
         if (sectionID != -1) {
-            String[] entry = {"" + sectionID, "" + courseName};
+            String[] entry = {"" + sectionID, "" + courseName, "" + teacherID};
             return entry;
         }
         return null;

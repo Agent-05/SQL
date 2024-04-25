@@ -8,12 +8,19 @@ import java.util.ArrayList;
 
 public class sectionPanel extends JPanel {
     ArrayList<Section> sections = new ArrayList<>();
+    ArrayList<Enrollment> students1 = new ArrayList<>();
     JComboBox<Teacher> teachers = new JComboBox<>();
     JComboBox<Course> courses = new JComboBox<>();
+    int teacherID = -1;
+    int courseID = -1;
+
+    JList<Section> jList = new JList<>();
+    JScrollPane sectionsPane = new JScrollPane(jList);
     Frame parent = null;
     //Makes the Table Model Variables
     String[] columnTitles = {"Student Last", "Student First", "Student ID"};
     String[][] data = {};
+
     DefaultTableModel tableModel = new DefaultTableModel(data, columnTitles){
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -26,11 +33,9 @@ public class sectionPanel extends JPanel {
         getNames();
         this.setLayout(null);
         this.setBounds(0,25,800,437);
-        JList<Section> jList = new JList<>();
-        jList.setListData(toArr(sections));
-        JScrollPane sectionsPane = new JScrollPane(jList);
         sectionsPane.setBounds(10, 140, 280, 135);
         this.add(sectionsPane);
+        jList.setListData(toArr(sections));
 
         ArrayList<Student> students = parent.sp.students;
 
@@ -97,7 +102,7 @@ public class sectionPanel extends JPanel {
         this.add(deselect);
         this.add(addSection);
         this.add(removeSection);
-
+        updateSections(teacherID, courseID);
         //everything is layed out
 
         addSection.addActionListener(e -> {
@@ -143,15 +148,22 @@ public class sectionPanel extends JPanel {
         });
 
         remove.addActionListener(e -> {
-
+            int row = table.getSelectedRow();
+            Enrollment entry = students1.get(row);
+            entry.updateEnrollment(-1, 0);
+            tableModel.removeRow(row);
+            students1.remove(entry);
+            table.clearSelection();
+            deselect.setVisible(false);
         });
-
         teachers.addItemListener(e -> {
-
+            teacherID = e.getID();
+            updateSections(e.getID(), courseID);
         });
 
         courses.addItemListener(e -> {
-
+            courseID = e.getID();
+            updateSections(teacherID, e.getID());
         });
 
         jList.addListSelectionListener(e -> {
@@ -231,6 +243,8 @@ public class sectionPanel extends JPanel {
     public void updateTable(int sectionID)
     {
         ArrayList<Integer> g = new ArrayList<>();
+        tableModel.setNumRows(0);
+        students1.clear();
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
@@ -250,6 +264,7 @@ public class sectionPanel extends JPanel {
                 {
                     if(rs.getInt("id") == a)
                     {
+                        students1.add(new Enrollment(sectionID, a));
                         //looking for section id
                         String[] entry = {rs.getString("first_name"), "" + rs.getString("last_name"), "" + rs.getInt("id")};
                         //String[] entry = {"" + rs.getInt("student_id"), "" + courseName};
@@ -262,9 +277,30 @@ public class sectionPanel extends JPanel {
 
         }catch(Exception e)
         {
-            e.printStackTrace();
+
         }
     }
 
+    public void updateSections(int teacherID, int courseID){
+        ArrayList<Section> toDisplay = new ArrayList<>();
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM section;");
+            while(rs!=null && rs.next())
+            {
+                if(rs.getInt("teacher_id") == teacherID && rs.getInt("course_id") == courseID)
+                {
+                    toDisplay.add(new Section(rs.getInt("id"), rs.getInt("teacher_id"), rs.getInt("course_id")));
+                }
+            }
+            jList.setListData(toArr(sections));
 
+            con.close();
+
+        }catch(Exception e)
+        {
+
+        }
+    }
 }
