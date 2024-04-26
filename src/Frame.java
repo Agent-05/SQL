@@ -5,6 +5,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 
+////////////////////////////////
+//Whenever you add a course it shows up as -1 for some reason, but when you launch the program again it fixes it
+//so it needs to be updated in the script and shown in real time because otherwise you cant delete it
+//students can get added to any section as long as it is one subject, the minute you give
+//teachers new subjects students cant get added and the teachers also only display one class
+//at a time in the teacher panel so that needs to get fixed too
+//other than that students are getting added and showing their classes nicely
+//and you can add new sections to whatever teacher and class that you want
+//also the course dropdown needs to show text and not a number for class difficulty
+////////////////////////////////
+
 public class Frame extends JFrame {
     teacherPanel tp=new teacherPanel(this);
     studentPanel sp=new studentPanel(this);

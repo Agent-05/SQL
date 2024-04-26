@@ -63,6 +63,15 @@ public class Teacher {
                     }
                 }
             }
+
+            rs = s.executeQuery("select * from section");
+            while(rs!=null&&rs.next())
+            {
+                if(rs.getInt("teacher_id") == id)
+                {
+                        s.execute("DELETE FROM section WHERE teacher_id="+id+";");
+                }
+            }
             con.close();
         }catch(Exception e){ System.out.println(e);}
     }

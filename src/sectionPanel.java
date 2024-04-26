@@ -35,7 +35,6 @@ public class sectionPanel extends JPanel {
         this.setBounds(0,25,800,437);
         sectionsPane.setBounds(10, 140, 280, 135);
         this.add(sectionsPane);
-        jList.setListData(toArr(sections));
 
         ArrayList<Student> students = parent.sp.students;
 
@@ -102,7 +101,6 @@ public class sectionPanel extends JPanel {
         this.add(deselect);
         this.add(addSection);
         this.add(removeSection);
-        updateSections(teacherID, courseID);
         //everything is layed out
 
         addSection.addActionListener(e -> {
@@ -112,7 +110,7 @@ public class sectionPanel extends JPanel {
                     Section newSection = new Section(course.getId(), teacher.getId());
                     sections.add(newSection);
                     getNames();
-                    jList.setListData(toArr(sections));
+                    updateSections(teacherID, courseID);
                 }
             else{
 
@@ -124,7 +122,7 @@ public class sectionPanel extends JPanel {
             if (jList.getSelectedValue() != null){
                 jList.getSelectedValue().updateSection(jList.getSelectedValue().getId(), -1, jList.getSelectedValue().getTeacherId());
                 getNames();
-                jList.setListData(toArr(sections));
+                updateSections(teacherID, courseID);
             }
             else{
 
@@ -140,6 +138,7 @@ public class sectionPanel extends JPanel {
                     getNames();
                     Enrollment enrollment = new Enrollment(sectionToAdd.getId(), student.getId());
                     updateTable(sectionToAdd.id);
+                    updateSections(teacherID, courseID);
                 }
             }
             else{
@@ -150,20 +149,29 @@ public class sectionPanel extends JPanel {
         remove.addActionListener(e -> {
             int row = table.getSelectedRow();
             Enrollment entry = students1.get(row);
-            entry.updateEnrollment(-1, 0);
-            tableModel.removeRow(row);
+            entry.updateEnrollment(entry.getId(), -1);
+            updateSections(teacherID, courseID);
+            tableModel.removeRow(row-1);
             students1.remove(entry);
             table.clearSelection();
             deselect.setVisible(false);
         });
         teachers.addItemListener(e -> {
-            teacherID = e.getID();
-            updateSections(e.getID(), courseID);
+            if(teachers.getSelectedItem() != null)
+            {
+                Teacher a = (Teacher)(teachers.getSelectedItem());
+                teacherID = a.getId();
+                updateSections(teacherID, courseID);
+            }
         });
 
         courses.addItemListener(e -> {
-            courseID = e.getID();
-            updateSections(teacherID, e.getID());
+            if(courses.getSelectedItem() != null)
+            {
+                Course a = (Course)(courses.getSelectedItem());
+                courseID = a.getId();
+                updateSections(teacherID, courseID);
+            }
         });
 
         jList.addListSelectionListener(e -> {
@@ -281,20 +289,25 @@ public class sectionPanel extends JPanel {
         }
     }
 
+    ArrayList<Section> toDisplay = new ArrayList<>();
     public void updateSections(int teacherID, int courseID){
-        ArrayList<Section> toDisplay = new ArrayList<>();
+        toDisplay.clear();
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM section;");
             while(rs!=null && rs.next())
             {
+                System.out.println("Needed: " + rs.getInt("teacher_id"));
+                System.out.println("Needed Course: " + rs.getInt("course_id"));
+                System.out.println("Got: " + teacherID);
+                System.out.println("Got Course: " + courseID + "\n");
                 if(rs.getInt("teacher_id") == teacherID && rs.getInt("course_id") == courseID)
                 {
                     toDisplay.add(new Section(rs.getInt("id"), rs.getInt("teacher_id"), rs.getInt("course_id")));
                 }
             }
-            jList.setListData(toArr(sections));
+            jList.setListData(toArr(toDisplay));
 
             con.close();
 

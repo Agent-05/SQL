@@ -33,7 +33,7 @@ public class Section {
             }
             catch(Exception e)
             {
-                System.out.println("id already exists");
+                System.out.println(e);
             }
             con.close();
         }catch(Exception e){ System.out.println(e);}
