@@ -148,7 +148,7 @@ public class sectionPanel extends JPanel {
 
         remove.addActionListener(e -> {
             int row = table.getSelectedRow();
-            Enrollment entry = students1.get(row);
+            Enrollment entry = students1.get(row-1);
             entry.updateEnrollment(entry.getId(), -1);
             updateSections(teacherID, courseID);
             tableModel.removeRow(row-1);

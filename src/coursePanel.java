@@ -157,7 +157,7 @@ public class coursePanel extends JPanel {
             }
             else{
                 int row = table.getSelectedRow();
-                Course entry = courses.get(row);
+                Course entry = courses.get(row-1);
                 String difEntry = group.getSelection().getActionCommand();
                 int entryD = -1;
                 String tableD = "";
@@ -184,7 +184,7 @@ public class coursePanel extends JPanel {
 
         delete.addActionListener(e-> {
             int row = table.getSelectedRow();
-            Course entry = courses.get(row);
+            Course entry = courses.get(row-1);
             entry.updateCourse(entry.getId(), "-", entry.getDiff());
             tableModel.removeRow(row);
             courses.remove(entry);

@@ -2,8 +2,13 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.*;
+import java.sql.*;
 
 ////////////////////////////////
 //Whenever you add a course it shows up as -1 for some reason, but when you launch the program again it fixes it
@@ -126,8 +131,8 @@ public class Frame extends JFrame {
             this.remove(ap);
 
             this.add(secP);
-            repaint();
             secP.update();
+            repaint();
         });
 
 
@@ -182,10 +187,20 @@ public class Frame extends JFrame {
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//only a file can be imported
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                    +  chooser.getCurrentDirectory());
-            System.out.println("getSelectedFile() : "
-                    +  chooser.getSelectedFile());
+            File f = chooser.getSelectedFile();//sets path
+            try{
+                Scanner m = new Scanner(f);
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+                Statement s =  con.createStatement();
+                while (m.hasNextLine())
+                {
+                    String data = m.nextLine();
+                    s.execute("\""+data+"\"");
+                }
+                con.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         else {
             System.out.println("No Selection ");
@@ -204,12 +219,11 @@ public class Frame extends JFrame {
                 File f = new File(chooser.getCurrentDirectory() + "\\School Manager Data1.txt");//sets path
                 f.createNewFile();
                 //sets path
+                System.out.println("getCurrentDirectory(): "+  f.getAbsolutePath());
                 FileWriter myWriter = new FileWriter(f);
                 myWriter.write(createTextFile());
                 myWriter.close();
             }catch (Exception e){System.out.println("Error creating file");};
-            System.out.println("getCurrentDirectory(): "
-                    +  chooser.getCurrentDirectory());
             System.out.println("getSelectedFile() : "
                     +  chooser.getSelectedFile());
         }
@@ -231,27 +245,32 @@ public class Frame extends JFrame {
         ArrayList<Teacher> t = tp.teachers;
         ArrayList<Section> x = secP.sections;
         ArrayList<Course> c = cp.courses;
+        newFile += "CREATE table if not exists student(id INTEGER NOT NULL AUTO_INCREMENT, first_name text, last_name text, PRIMARY KEY(id));\n";
+        newFile += "CREATE table if not exists teacher(id INTEGER NOT NULL AUTO_INCREMENT, first_name text, last_name text, PRIMARY KEY(id));\n";
+        newFile += "CREATE table if not exists section(id INTEGER NOT NULL AUTO_INCREMENT, course_id INTEGER NOT NULL, teacher_id INTEGER NOT NULL, PRIMARY KEY(id));\n";
+        newFile += "CREATE table if not exists enrollment(id INTEGER NOT NULL, student_id INTEGER NOT NULL, FOREIGN KEY (id) REFERENCES section(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE ON UPDATE CASCADE);\n";
+        newFile += "CREATE table if not exists course(id INTEGER NOT NULL AUTO_INCREMENT, title text, diff INTEGER NOT NULL, PRIMARY KEY(id));\n";
         for(Enrollment a : e)
         {
-            newFile += "INSERT INTO enrollment (id, student_id) VALUES ("+a.getId()+", "+a.getStudentId()+")\n";
+            newFile += "INSERT INTO enrollment (id, student_id) VALUES ("+a.getId()+", "+a.getStudentId()+");\n";
         }
 
         for(Student a : s)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getFn()+"\', \'"+a.getLn()+"\')\n";
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
         }
 
         for(Teacher a : t)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getFn()+"\', \'"+a.getLn()+"\')\n";
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
         }
         for(Section a : x)
         {
-            newFile += "INSERT INTO section (id, course_id, teacher_id) VALUES ("+a.getId()+", "+a.getCourseId()+", "+a.getTeacherId()+")\n";
+            newFile += "INSERT INTO section (id, course_id, teacher_id) VALUES ("+a.getId()+", "+a.getCourseId()+", "+a.getTeacherId()+");\n";
         }
         for(Course a : c)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+"\'"+a.getTitle()+"\', "+a.getDiff()+")\n";
+            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getTitle()+"\', "+a.getDiff()+");\n";
         }
         return newFile;
     }

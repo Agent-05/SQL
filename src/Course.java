@@ -30,8 +30,14 @@ public class Course {
 
             try{
                 s.execute("INSERT INTO course (title, diff) VALUES (\'"+title+"\', "+diff+")");
-                ResultSet rs = s.executeQuery("SELECT title, diff FROM course;");
-                id = rs.getInt("id");
+                ResultSet rs = s.executeQuery("SELECT * from course;");
+                while(rs!=null&&rs.next())
+                {
+                    if(rs.getString("title").equals(title))
+                    {
+                        id = rs.getInt("id");
+                    }
+                }
             }
             catch(Exception e)
             {
