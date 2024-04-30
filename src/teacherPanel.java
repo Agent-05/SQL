@@ -153,6 +153,7 @@ public class teacherPanel extends JPanel {
         });
 
         teacherList.addListSelectionListener(e -> {
+            //
             for (int i = tableModel.getRowCount(); i > 0; i--){
                 tableModel.removeRow(i-1);
             }
@@ -165,9 +166,12 @@ public class teacherPanel extends JPanel {
                     delete.setVisible(true);
                     fName.setText(teacher.getFn());
                     lName.setText(teacher.getLn());
-                    String[] entry = loadData(teacher.getId());
+                    ArrayList<String[]> entry = loadData(teacher.getId());
                     if (entry != null) {
-                        tableModel.addRow(entry);
+                        for(String[] l : entry)
+                        {
+                            tableModel.addRow(l);
+                        }
                     }
                 }
             }
@@ -209,10 +213,10 @@ public class teacherPanel extends JPanel {
         }
     }
 
-    public String[] loadData(/*DefaultTableModel table,*/ int teacherID){
+    public ArrayList<String[]> loadData(/*DefaultTableModel table,*/ int teacherID){
         int sectionID = -1;
         int courseID = -1;
-        String courseName = null;
+        ArrayList<String[]> arr = new ArrayList<>();
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
@@ -224,29 +228,27 @@ public class teacherPanel extends JPanel {
                 {
                     sectionID = rs.getInt("id");
                     courseID = rs.getInt("course_id");
+                    ResultSet rs1 = s.executeQuery("SELECT * FROM course;");
+                    while(rs1!=null && rs1.next())
+                    {
+                        if(rs1.getInt("id") == courseID)
+                        {
+                            String[] entry = {"" + sectionID, "" + rs1.getString("title")};
+                            arr.add(entry);
+                        }
+                    }
                 }
             }
-            rs = s.executeQuery("SELECT * FROM course;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("id") == courseID)
-                {
-                    courseName = rs.getString("title");
-                }
-            }
-
-            //use sectionID, course title
             con.close();
+            //use sectionID, course title
+            return arr;
 
         }catch(Exception e)
         {
             e.printStackTrace();
         }
-        if (sectionID != -1) {
-            String[] entry = {"" + sectionID, "" + courseName};
-            return entry;
-        }
-        return null;
+        System.out.println("Noo:(");
+        return arr;
     }
 
 }

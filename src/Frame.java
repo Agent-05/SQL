@@ -11,8 +11,6 @@ import java.util.*;
 import java.sql.*;
 
 ////////////////////////////////
-//Whenever you add a course it shows up as -1 for some reason, but when you launch the program again it fixes it
-//so it needs to be updated in the script and shown in real time because otherwise you cant delete it
 //students can get added to any section as long as it is one subject, the minute you give
 //teachers new subjects students cant get added and the teachers also only display one class
 //at a time in the teacher panel so that needs to get fixed too

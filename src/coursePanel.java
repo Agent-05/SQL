@@ -152,6 +152,7 @@ public class coursePanel extends JPanel {
                     Course newEntry1 = new Course(fName.getText(), entrySet);
 
                     String[] newEntry = { Integer.toString(newEntry1.getId()), fName.getText(), diff};
+                    courses.add(newEntry1);
                     tableModel.addRow(newEntry);
                 }
             }
@@ -184,7 +185,9 @@ public class coursePanel extends JPanel {
 
         delete.addActionListener(e-> {
             int row = table.getSelectedRow();
-            Course entry = courses.get(row-1);
+            System.out.println("Row = " + row + " tableModelSize = " + tableModel.getRowCount() + " courseSize = " + courses.size());
+
+            Course entry = courses.get(row);
             entry.updateCourse(entry.getId(), "-", entry.getDiff());
             tableModel.removeRow(row);
             courses.remove(entry);
@@ -194,7 +197,7 @@ public class coursePanel extends JPanel {
             table.clearSelection();
             deselect.setVisible(false);
             delete.setVisible(false);
-
+            System.out.println("tableModelSize = " + tableModel.getRowCount());
         });
 
         deselect.addActionListener(e-> {
