@@ -158,9 +158,9 @@ public class studentPanel extends JPanel {
                     fName.setText(student.getFn());
                     lName.setText(student.getLn());
                     idName.setText("" + student.getId());
-                    String[] entry = loadData(student.getId());
-                    if (entry != null) {
-                        tableModel.addRow(entry);
+                    ArrayList<String[]> entrys = loadData(student.getId());
+                    for (String[] a: entrys){
+                        tableModel.addRow(a);
                     }
                 }
             }
@@ -198,56 +198,55 @@ public class studentPanel extends JPanel {
         }
     }
 
-    public String[] loadData(/*DefaultTableModel table,*/ int studentID){
+    public ArrayList<String[]> loadData(/*DefaultTableModel table,*/ int studentID){
         int sectionID = -1;
         int teacherID = -1;
         int courseID = -1;
         String courseName = "";
+        ArrayList<String[]> arr = new ArrayList<>();
 
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM enrollment;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("student_id") == studentID)
-                {
-                    //looking for id
-                    sectionID = rs.getInt("id");
-                }
-            }
-            rs = s.executeQuery("SELECT * FROM section;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("id") == sectionID)
-                {
-                    //looking for teacher and course id
-                    teacherID = rs.getInt("teacher_id");
-                    courseID = rs.getInt("course_id");
-                }
-            }
-            rs = s.executeQuery("SELECT * FROM course;");
-            while(rs!=null && rs.next())
-            {
-                if(rs.getInt("id") == courseID)
-                {
-                    //looking for courseName
-                    courseName = rs.getString("title");
-                }
-            }
+            Statement s1 = con.createStatement();
+            Statement s2 = con.createStatement();
 
-            //use courseName, teacher ID and sectionID
+            ResultSet enrollemnt = s.executeQuery("SELECT * FROM enrollment;");
+
+            //i need the section id, the course title, and teacher id
+            while(enrollemnt!=null && enrollemnt.next())
+            {
+                if(enrollemnt.getInt("student_id") == studentID)
+                {
+                    System.out.println("First chunk");
+                    //looking for id
+                    sectionID = enrollemnt.getInt("id");
+                    ResultSet sections = s1.executeQuery("SELECT * from section");
+                    while(sections!= null && sections.next()){
+                        if (sections.getInt("id") == sectionID) {
+                            System.out.print("Second chunk");
+                            teacherID = sections.getInt("teacher_id");
+                            courseID = sections.getInt("course_id");
+
+                            ResultSet courses = s2.executeQuery("SELECT * from course");
+                            while (courses!= null && courses.next()){
+                                if (courses.getInt("id") == courseID){
+                                    System.out.print("Third chunk");
+                                    courseName = courses.getString("title");
+                                    String[] insert = {"" + sectionID, courseName, "" + teacherID};
+                                    arr.add(insert);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             con.close();
 
         }catch(Exception e)
         {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
-        if (sectionID != -1) {
-            String[] entry = {"" + sectionID, "" + courseName, "" + teacherID};
-            return entry;
-        }
-        return null;
+        return arr;
     }
-
 }
