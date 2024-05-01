@@ -220,32 +220,40 @@ public class teacherPanel extends JPanel {
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
             Statement s =  con.createStatement();
+            Statement s1 = con.createStatement();
 
             ResultSet rs = s.executeQuery("SELECT * FROM section;");
-            while(rs!=null && rs.next())
+            rs.next();
+            while(rs!=null)
             {
+                System.out.print("loadData 0");
                 if(rs.getInt("teacher_id") == teacherID)
                 {
+                    System.out.print("loadData 1");
                     sectionID = rs.getInt("id");
                     courseID = rs.getInt("course_id");
-                    ResultSet rs1 = s.executeQuery("SELECT * FROM course;");
+                    ResultSet rs1 = s1.executeQuery("SELECT * FROM course;");
                     while(rs1!=null && rs1.next())
                     {
+                        System.out.print("loadData 2");
                         if(rs1.getInt("id") == courseID)
                         {
+                            System.out.print("loadData 3");
                             String[] entry = {"" + sectionID, "" + rs1.getString("title")};
                             arr.add(entry);
                         }
                     }
                 }
+                rs.next();
             }
+            System.out.println("loadData 7");
             con.close();
             //use sectionID, course title
             return arr;
 
         }catch(Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         System.out.println("Noo:(");
         return arr;
