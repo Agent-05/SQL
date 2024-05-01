@@ -12,7 +12,7 @@ import java.sql.*;
 
 ////////////////////////////////
 //students can get added to any section as long as it is one subject, the minute you give
-//teachers new subjects students cant get added and the teachers also only display one class
+//teachers new subjects students cant get added
 //at a time in the teacher panel so that needs to get fixed too
 //other than that students are getting added and showing their classes nicely
 //and you can add new sections to whatever teacher and class that you want
