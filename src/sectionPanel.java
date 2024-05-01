@@ -18,8 +18,11 @@ public class sectionPanel extends JPanel {
     JScrollPane sectionsPane = new JScrollPane(jList);
     Frame parent = null;
     //Makes the Table Model Variables
+    ArrayList<Student> students;
     String[] columnTitles = {"Student Last", "Student First", "Student ID"};
     String[][] data = {};
+    JList<Student> studentJList;
+    JScrollPane studentsPane;
 
     DefaultTableModel tableModel = new DefaultTableModel(data, columnTitles){
         @Override
@@ -36,13 +39,11 @@ public class sectionPanel extends JPanel {
         sectionsPane.setBounds(10, 140, 280, 135);
         this.add(sectionsPane);
 
-        ArrayList<Student> students = parent.sp.students;
-
-        JList<Student> studentJList = new JList<>(toArr2(students));
-        JScrollPane studentsPane = new JScrollPane(studentJList);
+        students = parent.sp.students;
+        studentJList = new JList<>(toArr2(students));
+        studentsPane = new JScrollPane(studentJList);
         studentsPane.setBounds(560, 34, 230, 175);
         this.add(studentsPane);
-
 
         //Makes the Jtable and sets the basic functions
         JTable table = new JTable(tableModel);
@@ -239,7 +240,11 @@ public class sectionPanel extends JPanel {
         ArrayList<Course> courseArraylist = parent.cp.courses;
         teachers.removeAllItems();
         courses.removeAllItems();
-
+        students = parent.sp.students;
+        System.out.println(toArr2(students).length);
+        studentJList = new JList<>(toArr2(students));
+        //studentsPane = new JScrollPane(studentJList);
+        repaint();
         for (Teacher a: teachersArraylist){
             teachers.addItem(a);
         }
