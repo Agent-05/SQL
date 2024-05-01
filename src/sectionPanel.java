@@ -242,8 +242,7 @@ public class sectionPanel extends JPanel {
         courses.removeAllItems();
         students = parent.sp.students;
         System.out.println(toArr2(students).length);
-        studentJList = new JList<>(toArr2(students));
-        //studentsPane = new JScrollPane(studentJList);
+        studentJList.setListData(toArr2(students));
         repaint();
         for (Teacher a: teachersArraylist){
             teachers.addItem(a);
