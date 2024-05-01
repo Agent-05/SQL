@@ -26,7 +26,7 @@ public class Enrollment {
             ResultSet rs = s.executeQuery("select * from enrollment");
             while(rs!=null&&rs.next())
             {
-                if(rs.getInt("student_id") == student_id)
+                if(rs.getInt("student_id") == student_id && rs.getInt("id") == id)
                 {
                     can = false;
                 }
