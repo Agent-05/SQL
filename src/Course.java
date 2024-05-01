@@ -91,7 +91,21 @@ public class Course {
     @Override
     public String toString()
     {
-        return getTitle() + ", " + getDiff();
+        int dif = getDiff();
+        String academicLevel = "";
+        switch (dif){
+            case 0 -> {
+                academicLevel = "Aca";
+            }
+            case 1 -> {
+                academicLevel = "AP";
+            }
+            case 2 -> {
+                academicLevel = "KAP";
+            }
+
+    }
+        return getTitle() + ", " + academicLevel;
     }
 
 }
