@@ -70,7 +70,7 @@ public class Frame extends JFrame {
         });
 
         purgeItem.addActionListener(e -> {
-            mainPanel.setBackground(Color.green);
+            purge();
 
         });
         exitItem.addActionListener(e -> {
@@ -193,7 +193,7 @@ public class Frame extends JFrame {
                 while (m.hasNextLine())
                 {
                     String data = m.nextLine();
-                    s.execute("\""+data+"\"");
+                    s.execute(data);
                 }
                 con.close();
             } catch (Exception e) {
@@ -202,6 +202,22 @@ public class Frame extends JFrame {
         }
         else {
             System.out.println("No Selection ");
+        }
+    }
+
+    public void purge(){
+        try{
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_manager","root","password");
+            Statement s =  con.createStatement();
+            s.executeQuery("Drop table if exists section");
+            s.executeQuery("Drop table if exists teacher");
+            s.executeQuery("Drop table if exists enrollment");
+            s.executeQuery("Drop table if exists course");
+            s.executeQuery("Drop table if exists student");
+            con.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -255,12 +271,12 @@ public class Frame extends JFrame {
 
         for(Student a : s)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
+            newFile += "INSERT INTO student (id, first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
         }
 
         for(Teacher a : t)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
+            newFile += "INSERT INTO teacher (id, first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getFn()+"\', \'"+a.getLn()+"\');\n";
         }
         for(Section a : x)
         {
@@ -268,7 +284,7 @@ public class Frame extends JFrame {
         }
         for(Course a : c)
         {
-            newFile += "INSERT INTO student (first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getTitle()+"\', "+a.getDiff()+");\n";
+            newFile += "INSERT INTO course (id, first_name, last_name) VALUES ("+a.getId()+", "+"\'"+a.getTitle()+"\', "+a.getDiff()+");\n";
         }
         return newFile;
     }
